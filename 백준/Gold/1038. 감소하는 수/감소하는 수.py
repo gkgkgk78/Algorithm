@@ -1,0 +1,24 @@
+from collections import deque
+N=int(input())
+q = deque(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+total = 9
+if N <= 9:
+    print(q[N])
+    exit(0)
+
+sum=9
+while q:
+    c=q.popleft()
+    for i in range(0,10):
+        if int(c[-1])<=i:
+            break
+        q.append(c+str(i))
+        sum=sum+1
+        if sum==N:
+            print(q[-1])
+            exit(0)
+
+
+
+
+print(-1)
