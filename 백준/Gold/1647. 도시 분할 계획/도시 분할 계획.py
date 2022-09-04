@@ -22,7 +22,6 @@ def prim():
     heapq.heappush(q, (0, 1))
     while len(q) > 0:
         a1, a2 = heapq.heappop(q)  # 거리 인덱스
-
         if (visit[a2] == 1):
             continue
 
@@ -55,7 +54,10 @@ for _ in range(m):
 dist[1]=0
 result=0
 prim()
+gh=-sys.maxsize
 for i in dist:
     result+=i
-ma=max(dist)
-print(result-ma)
+    if(i>gh):
+        gh=i
+
+print(result-gh)
