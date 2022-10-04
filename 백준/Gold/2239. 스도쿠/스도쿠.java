@@ -14,13 +14,14 @@ import java.util.StringTokenizer;
 public class Main {
 
 	static int graph[][];
+	static StringBuffer buffer;
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		graph = new int[9][9];
-
+		buffer=new StringBuffer();
 		for (int i = 0; i < 9; i++) {
 			char temp[] = in.readLine().toCharArray();
 			for (int j = 0; j < 9; j++) {
@@ -35,9 +36,11 @@ public class Main {
 		game(0);
 		for (int i = 0; i < 9; i++) {
 			for(int j=0;j<9;j++)
-				System.out.print(graph[i][j]+"");
-			System.out.println();
+				buffer.append(graph[i][j]+"");
+				
+			buffer.append("\n");
 		}
+		System.out.println(buffer);
 
 	}
 
