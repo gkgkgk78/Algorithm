@@ -9,25 +9,14 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-
-	static class go {
-		int node, to;
-
-		public go(int node, int to) {
-			this.node = node;
-			this.to = to;
-		}
-
-	}
-
 	static int n, m;
 	static int degree[];
 	static List<List<Integer>> hi;
-
+	static StringBuffer buffer;
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
+		buffer=new StringBuffer();
 		StringTokenizer s = new StringTokenizer(in.readLine(), " ");
 		n = Integer.parseInt(s.nextToken());
 		m = Integer.parseInt(s.nextToken());
@@ -36,7 +25,6 @@ public class Main {
 			hi.add(new ArrayList<>());
 		}
 		degree = new int[n + 1];
-
 		for (int i = 0; i < m; i++) {
 			s = new StringTokenizer(in.readLine(), " ");
 			int a1, a2;
@@ -45,15 +33,6 @@ public class Main {
 			hi.get(a1).add(a2);
 			degree[a2] += 1;
 		}
-//		int u=0;
-//		for (List<Integer> list : hi) {
-//			System.out.println(u);
-//			u++;
-//			for (int a : list) {
-//				System.out.print(a+" ");
-//			}
-//			System.out.println();
-//		}
 		topology();
 
 	}
@@ -62,14 +41,11 @@ public class Main {
 		// TODO Auto-generated method stub
 		Queue<Integer> q = new LinkedList<>();
 		Queue<Integer> result = new LinkedList<>();
-
 		for (int i = 1; i <= n; i++) {
 			if (degree[i] == 0) {
 				q.add(i);
-				
 			}
 		}
-
 		while (!q.isEmpty()) {
 			int temp = q.poll();
 			result.add(temp);
@@ -84,8 +60,9 @@ public class Main {
 		}
 		//System.out.println(Arrays.toString(degree));
 		while(!result.isEmpty()) {
-			System.out.print(result.poll()+" ");
+			buffer.append(result.poll()+" ");
 		}
+		System.out.println(buffer);
 
 	}
 
