@@ -18,16 +18,12 @@ input = sys.stdin.readline
 
 
 def binary(left, right, times, n):
-    cnt = 0
-    answer = -1
-
     while left <= right:
-        mid = int((left + right) / 2)
+        mid = (left + right) //2
         cnt = 0
         for i in times:
-            cnt += int(mid / i)
+            cnt += mid//i
         if cnt < n:
-
             left = mid + 1
         else :
             right = mid - 1
@@ -40,7 +36,6 @@ def solution(n, times):
     left = 0
     right = times[-1]*n
     answer = binary(left, right, times, n)
-
     return answer
 
 
