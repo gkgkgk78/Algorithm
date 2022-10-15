@@ -1,18 +1,14 @@
 
 
 from collections import deque
-import copy
+#bfs(len(tickets)+1,route,0,[],"ICN")
 def dfs(end,route,cnt,ans,now):#
-
     if (now not in route or len(route[now]) == 0):
         if (cnt == end):
             return ans
         else:
             return []
-
-
     for i in route[now]:
-
         temp=route[now].pop(0)
         ans.append(temp)
         z=dfs(end,route,cnt+1,ans,temp)
@@ -38,12 +34,8 @@ def solution(tickets):
             route[start].append(i[1])
         else:
             route[start].append(i[1])
-    # for i in route.keys():
-    #     route[i].sort(reverse=True)
 
     last = []
-
-        #route1=copy.deepcopy(route)
     answer=dfs(len(tickets)+1,route,1,["ICN"],"ICN")
 
 
