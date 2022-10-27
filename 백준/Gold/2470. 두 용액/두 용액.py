@@ -1,31 +1,35 @@
-import sys, copy
-from itertools import combinations
-
-from collections import deque
-
+import sys
 input = sys.stdin.readline
 
 
-n=int(input())
+i=int(input().rstrip())
+de=list(map(int,input().split()))
 
-
-gr=list(map(int,input().split()))
-gr.sort()
+de.sort()
 left=0
-right=len(gr)-1
-ans=[]
-an=2147483647
+right=i-1
+uo=sys.maxsize
+
+tl=left
+tr=right
+
+ch=0
 while left<right:
-    exp=gr[left]+gr[right]
-    tr=abs(an)-0
-    tr1=abs(exp)-0
-    if tr1<=tr:
-        an=tr1
-        ans=[]
-        ans.append(gr[left])
-        ans.append(gr[right])
-    if exp<0:
+    mid=de[left]+de[right]
+    check=uo-mid
+    if (abs(mid) <= uo):
+        uo = abs(mid)
+        tl = left
+        tr = right
+    if (mid == 0):
+        print(str(de[left]) + " " + str(de[right]))
+        ch=1
+        break
+    if mid<0:
         left+=1
     else:
-        right -= 1
-print(*ans)
+        right-=1
+    
+
+if(ch==0):
+    print(str(de[tl]) + " " + str(de[tr]))
