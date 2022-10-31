@@ -28,11 +28,6 @@ public class Solution {
 
 	}
 
-	public static void main(String[] args) {
-		System.out.println(
-				solution(new int[][] { { 1,0,0,3 }, { 2,0,0,0 }, { 0,0,0,2 }, { 3,0,1,0 } }, 1, 0));
-				//solution(new int[][] { { 3, 0, 0, 2 }, { 0, 0, 1, 0 }, { 0, 1, 0, 0 }, { 2, 0, 0, 3 } }, 0, 1));
-	}
 
 	public static int solution(int[][] board, int r, int c) {
 		answer = Integer.MAX_VALUE;
