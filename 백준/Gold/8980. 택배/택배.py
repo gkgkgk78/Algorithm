@@ -15,7 +15,7 @@ for _ in range(t):
     total.append((a1,a2,a3))
 
 
-total=sorted(total,key=lambda x:(x[1],x[0]))
+total=sorted(total,key=lambda x:(x[1]))
 
 answer=0
 for i in range(t):
