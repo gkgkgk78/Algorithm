@@ -1,14 +1,9 @@
-import sys, copy, heapq
-import heapq, math
-from queue import PriorityQueue
-
+import sys
 input = sys.stdin.readline
 n,m=map(int,input().split()) 
-
 #우선은 각 마을에 오는 보내는 마을을 구한후에,
 mo=[0 for _ in range(n+1)]
 t=int(input().rstrip())
-
 total=[]
 for _ in range(t):
     a1,a2,a3=map(int,input().split())
