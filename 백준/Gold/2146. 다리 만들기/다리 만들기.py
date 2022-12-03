@@ -1,11 +1,6 @@
-import sys,copy
-from itertools import combinations
-
+import sys
 from collections import deque
-
 input=sys.stdin.readline
-
-
 def dfs1(s1,s2,c):
     q=deque()
     dx = [1, -1, 0, 0]
@@ -52,20 +47,12 @@ def dfs(s):
                 if graph[sx][sy]==0 and visit[sx][sy]==-1:
                     visit[sx][sy]=visit[v1][v2]+1
                     q.append((sx,sy))
-
-
-
 n=int(input())
 graph=[]
-
 visit=[[0]*n for _ in range(n)]
-
 for i in range(0,n):
     g=list(map(int,input().split()))
     graph.append(g)
-
-
-
 count=1
 for i in range(n):
     for j in range(n):
@@ -73,61 +60,8 @@ for i in range(n):
             graph[i][j]=count
             dfs1(i,j,count)
             count=count+1
-
-
-
-
-
 q=deque()
 mins=999999
-
 for i in range(1,count):
     dfs(i)
-
 print(mins)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
