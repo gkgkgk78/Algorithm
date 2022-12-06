@@ -1,100 +1,69 @@
-import sys, copy, heapq
-import heapq, math
-from itertools import permutations, combinations, product
-from collections import deque
-from itertools import product
-#sys.setrecursionlimit(10 ** 5)
-#a=list(product(i,repeat=len(powers)))
-#b=list(product(*a)) #리스트 안에 있는 원소들끼리 조합
+import sys
+input=sys.stdin.readline
 
-
-#input = sys.stdin.readline
-#01020306523합격8
-
-from itertools import combinations_with_replacement as cwr
-from collections import Counter
-time=0
 r,c,k=map(int,input().split())
+r-=1
+c-=1
 graph=[]
+
 for _ in range(3):
-    e=list(map(int,input().split()))
-    graph.append(e)
-len_row=3
-len_col=3
+    graph.append(list(map(int,input().split())))
 
-while 1:
-    if time >100:
-        print(-1)
-        break
+time=0
 
-    if r<=len_row and c<=len_col:
-        if  graph[r-1][c-1]==k:
-            print(time)
-            break
+row=3
+col=3
 
-    #r,c연산중 어떤걸 선택할지 정하는 부분
-    if len_row>=len_col:
-        #r연산 시작 하는 부분
-        for i in range(len(graph)):
-            e=graph[i]
-            te=dict()
-            for l in e:
-                if l !=0:
-                    if l not in te:
-                        te[l]=1
-                    else:
-                        te[l]+=1
-            ta=sorted(te.items(),key=lambda te:(te[1],te[0]))
-            ui=[]
-            for a1,a2 in ta:
-                ui.append(a1)
-                ui.append(a2)
-            graph[i]=ui
-            len_col=max(len_col,len(ui))
-        #이제 나머지 부분들 채워 주는 부분(0으로)
-        for i in range(len(graph)):
-            e = graph[i]
-            if len(e)!=len_col:
-                a1=len_col-len(e)
-                aa=[0 for _ in range(a1)]
-                graph[i].extend(aa)
-            if len(graph[i])>100:
-                graph[i]=graph[i][0:100]
 
-        time+=1
-    else:#이번에는 c연산을 하려고 함
-        #c연산시작하는 부분
+def makerow(graph,dir):
+    global row,col
+    total=[]
+    ee=0
+    op=0
+    #행을 진행하면서 계산을 해야지
+    for i in range(len(graph)):
+        #한 행 안에서 연산을 진행 해 볼거임
+        cal = dict()
+        for k in graph[i]:
+            if k!=0:
+                if k not in cal:
+                    cal[k]=1
+                else:
+                    cal[k]+=1
+        temp=[]
+        for l in cal.items():
+            temp.append(l)
+        temp=sorted(temp,key=lambda  x: (x[1],x[0]) )
+        op=max(op,len(temp)*2)
+        temp_1=[]
+        for l in temp:
+            temp_1.append(l[0])
+            temp_1.append(l[1])
 
-        for i in range(0,(len_col)):
-            te=dict()
-            if i==1:
-                efef=32
-            for j in range(0,(len_row)):
-                if graph[j][i]!=0:
-                    if graph[j][i] not in te:
-                        te[graph[j][i]]=1
-                    else:
-                        te[graph[j][i]]+=1
-            ta = sorted(te.items(), key=lambda te: (te[1], te[0]))
-            ui = []
-            for a1, a2 in ta:
-                ui.append(a1)
-                ui.append(a2)
-            a3 = len_row - len(ui)
-            if a3<0:
-                for _ in range(abs(a3)):
-                    graph.append([0 for _  in range(len_col)])
-            if a3>0:
-                for _ in range(a3):
-                    ui.append(0)
-            len_row = max(len_row, len(ui))
-            ooo=graph
-            jh=0
+        total.append(temp_1)
 
-            for _ in range(0,len_row):
-                graph[jh][i]=ui[jh]
-                jh+=1
+    for l in total:
+        if len(l)<op:
+            while(len(l)<op):
+                l.append(0)
+    if dir==1:
+        return list(zip(*total))
+    else:
+        return total
 
-        if len_row>100:
-            graph=graph[0:100]
-        time += 1
+
+while time<=100:
+
+    if(0<=r<len(graph) and 0<=c<len(graph[0]) and graph[r][c]==k ):
+        print(time)
+        sys.exit(0)
+
+    #r,c연산중에서 어디를 진행을 할지를 정하도록 해야함
+    if(len(graph)>=len(graph[0])):
+        graph=makerow(graph,0)
+    else:
+         graph=makerow(list(zip(*graph)),1)
+    time+=1
+
+
+print(-1)
