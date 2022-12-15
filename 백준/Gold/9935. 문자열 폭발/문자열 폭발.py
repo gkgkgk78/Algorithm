@@ -2,9 +2,8 @@ import sys
 from collections import deque
 input=sys.stdin.readline
 
-
 e=list(input().rstrip())
-test=list(input().rstrip())
+test=input().rstrip()
 
 last=test[-1]
 leng=len(test)
@@ -16,12 +15,8 @@ for i in e:
         tt=0
         check=0
         if la-leng>=0:
-            for k in range(la-leng,la):
-                if test[tt]!=stack[k]:
-                    check=1
-                    break
-                tt += 1
-            if check==0:
+            ah="".join(stack[la-leng:])
+            if ah==test:
                 for k in range(len(test)):
                     stack.pop()
 
