@@ -1,63 +1,56 @@
-import sys, copy, heapq
-import heapq, math
-from queue import PriorityQueue
-from itertools import permutations, combinations, product
-from collections import deque
-from itertools import product
-
-#sys.setrecursionlimit(10 ** 5)
-#a=list(product(i,repeat=len(powers)))
-#b=list(product(*a)) #리스트 안에 있는 원소들끼리 조합
+import sys
+input=sys.stdin.readline
 
 
-from itertools import combinations_with_replacement as cwr
-from collections import Counter
-input = sys.stdin.readline
+n,m=map(int,input().split())
+home=[0]*(n+1)
+
+edge=[]
+parents=[0]*(n+1)
+
+def make():
+    for i in range(1,n+1):
+        parents[i]=i
+
+def find(a):
+    if parents[a]==a:
+        return a
+    parents[a]=find(parents[a])
+    return parents[a]
+
+def union(a,b):
+    a1=find(a)
+    a2=find(b)
+
+    if a1==a2:
+        return 0
+
+    if a1<a2:
+        parents[a2]=a1
+    else:
+        parents[a1]=a2
+    return 1
 
 
-def prim():
-    global result
-    count = 0
-    q = []
-    heapq.heappush(q, (0, 1))
-    while len(q) > 0:
-        a1, a2 = heapq.heappop(q)  # 거리 인덱스
-        if (visit[a2] == 1):
-            continue
 
-        visit[a2] = 1
-        count += 1
-        if (count == n):
-            break
-        for a3, a4 in graph[a2]:
-            if (visit[a3] == 0 and dist[a3] > a4):
-                dist[a3] = a4
-                heapq.heappush(q, (dist[a3], a3))
-
-
-n, m = map(int, input().split())
-graph=[[] for _ in range(n+1)]
-visit=[0 for _ in range(n+1)]
-dist=[0 for _ in range(n+1)]
-for i in range(1,n+1):
-    dist[i]=math.inf
-total=0
-ex=0
 for _ in range(m):
-    t=list(map(int,input().split()))
-    a1=t[0]
-    a2 = t[1]
-    a3 = t[2]
-    graph[a1].append((a2,a3))
-    graph[a2].append((a1,a3))
-    total+=a3
-dist[1]=0
-result=0
-prim()
-gh=-sys.maxsize
-for i in dist:
-    result+=i
-    if(i>gh):
-        gh=i
+    a1,a2,a3=map(int,input().split())
+    edge.append((a1,a2,a3))
 
-print(result-gh)
+edge=sorted(edge,key=lambda x:(x[2]))
+
+
+
+so=0
+maz=0
+make()
+for i in edge:
+    a1,a2,a3=i
+    z1=find(a1)
+    z2=find(a2)
+    if(z1!=z2):
+        union(z1,z2)
+        so+=a3
+        maz=max(maz,a3)
+
+print(so-maz)
