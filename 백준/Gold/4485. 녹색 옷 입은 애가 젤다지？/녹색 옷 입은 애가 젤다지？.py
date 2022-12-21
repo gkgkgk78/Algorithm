@@ -1,62 +1,40 @@
-import sys, copy, heapq
-import heapq, math
-from itertools import permutations, combinations, product
-from collections import deque
-from itertools import product
-#sys.setrecursionlimit(10 ** 5)
-#a=list(product(i,repeat=len(powers)))
-#b=list(product(*a)) #리스트 안에 있는 원소들끼리 조합
+import sys,heapq
+input=sys.stdin.readline
 
+problem=1
+def dijk(graph,t):
+    temp=[[sys.maxsize]*t for _ in range(t)]
 
+    dx=[-1,0,1,0]
+    dy=[0,1,0,-1]
+    q=[]
+    temp[0][0] = graph[0][0]
+    heapq.heappush(q,(temp[0][0],0,0))
 
-
-from itertools import combinations_with_replacement as cwr
-from collections import Counter
-input = sys.stdin.readline
-
-count=1
-def dd():
-    q = []
-    heapq.heappush(q, (graph[0][0], 0, 0))#가중치 갈곳의 위치
-    dx = [-1, 1, 0, 0]
-    dy = [0, 0, -1, 1]
-    visit[0][0] = 0
     while q:
-        dis, x,y = heapq.heappop(q)
-        if x==n-1 and y==n-1:
-            print(f'Problem {count}: {visit[n-1][n-1]}')
+        a1=heapq.heappop(q)
+        if a1[1]==t-1 and a1[2]==t-1:
+            return temp[a1[1]][a1[2]]
 
         for i in range(4):
-            zx=dx[i]+x
-            zy=dy[i]+y
-            if 0<=zx<n and 0<=zy<n:
-                if visit[zx][zy] < dis:
-                    continue
-                else:
-                        cost = dis + graph[zx][zy]
-                        if cost <visit[zx][zy]:
-                            visit[zx][zy]= cost
-                            heapq.heappush(q, (cost,zx,zy))
+            zx=a1[1]+dx[i]
+            zy=a1[2]+dy[i]
+            if 0<=zx<t and 0<=zy<t:
+                if temp[zx][zy]>a1[0]+graph[zx][zy]:
+                    temp[zx][zy]=a1[0]+graph[zx][zy]
+                    heapq.heappush(q,(temp[zx][zy],zx,zy))
 
 
 
 
-
+ans=""
 while 1:
-
-    INF = int(1e9)
-
-    n=int(input().rstrip())
-    if(n==0):
+    t = int(input().rstrip())
+    if t==0:
         break
-    # 각 노드에 연결되어 있는 노드에 대한 정보를 담는 리스트를 만들기
-    graph = []
-    visit=[[10**5 for _ in range(n)] for _ in range(n) ]
+    graph=[list(map(int,input().split())) for _ in range(t)]
+    res=dijk(graph,t)
+    ans+="Problem "+str(problem)+": "+str(res)+"\n"
+    problem+=1
 
-    # 최단 거리 테이블을 모두 무한으로 초기화
-    for i in range(n):
-        e=list(map(int,input().split()))
-        graph.append(e)
-
-    dd()
-    count+=1
+print(ans)
