@@ -1,6 +1,7 @@
 import sys,heapq
 input=sys.stdin.readline
 g=int(input().rstrip())
+#https://cocoon1787.tistory.com/437
 def dijk(s,now,road,g,h,vertex):
     q=[]
     vertex[s]=0
@@ -64,4 +65,3 @@ for _ in range(g):
 
     answer.sort()
     print(*answer)
-
