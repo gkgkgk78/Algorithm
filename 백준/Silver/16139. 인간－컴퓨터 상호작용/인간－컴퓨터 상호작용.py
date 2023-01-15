@@ -4,9 +4,11 @@ input = sys.stdin.readline
 s=input().rstrip()
 arr=[[0]*(26) for _ in range(len(s))]
 
-for i in range(len(s)):
-    for j in range(i, len(s)):
-        arr[j][ord(s[i]) - 97] += 1
+arr[0][ord(s[0]) - 97] = 1
+for i in range(1, len(s)):
+    arr[i][ord(s[i]) - 97] = 1
+    for j in range(26):
+        arr[i][j] += arr[i - 1][j]
 q = int(input())
 
 for _ in range(q):
@@ -19,7 +21,5 @@ for _ in range(q):
         left=0
     else:
         left=arr[l-1][ord(alp)-97]
-
     right=arr[r][ord(alp)-97]
-
     print(right-left)
