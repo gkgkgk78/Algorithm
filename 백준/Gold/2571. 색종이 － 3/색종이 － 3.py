@@ -1,11 +1,6 @@
-
 import sys
 input = sys.stdin.readline
-
-
 graph=[[0]*100 for _ in range(100)]
-
-
 n=int(input().rstrip())
 for _ in range(n):
     a1,a2=map(int,input().split())
@@ -17,21 +12,14 @@ for _ in range(n):
 
 answer=-sys.maxsize
 
-
 def check(x,y,width):
 
     #현재 시작 점에서의 세로의 누적합을 의미를 함
     now_min=graph[x][y]
 
-
     for i in range(y,y+width+1):
         now_min=min(now_min,graph[x][i])
-    if now_min*width==112:
-        now_min=now_min
-
-
     return now_min*(width+1)
-
 
 def go(x,y):
     now=-sys.maxsize
@@ -43,7 +31,6 @@ def go(x,y):
         temp=check(x,y,j)
         now=max(temp,now)
     return now
-
 
 for i in range(99):
     for j in range(100):
