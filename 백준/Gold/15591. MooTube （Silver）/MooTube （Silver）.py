@@ -25,9 +25,8 @@ def bfs(vertex,l,graph):
                 visit[a1]=1
                 q.append(a1)
                 tt+=1
-    return tt
+    print(tt)
 
 for l in range(q):
     a1,a2=map(int,input().split())
     e=bfs(a2,a1,graph)
-    print(e)
