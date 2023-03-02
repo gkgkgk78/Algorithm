@@ -32,13 +32,9 @@ def bfs(vertex):
                 q.append(a1)
 
 
-
-
-for i in range(1,n+1):
-    bfs(i)
-
 for l in range(q):
     a1,a2=map(int,input().split())
+    bfs(a2)
     temp=0
     for l in total[a2]:
         if l>=a1 and l !=sys.maxsize:
