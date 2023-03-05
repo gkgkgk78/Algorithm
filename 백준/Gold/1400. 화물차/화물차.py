@@ -1,13 +1,9 @@
 import sys
-import heapq
 from collections import deque
 input = sys.stdin.readline
-
 def check(x, y, zx, zy, cross, time):
     # 우선은 현재 지나갈수 있는 시간대인지 아닌지를 파악을 해야함
     # 지금 현재 시간에서 교차로의 위치가 변경이 되어야 한다면 변환해 주어야 함
-
-    ntime = 0
     a1, a2, a3, a4 = cross  # 0 - 동서 남북
     now_dir = a2
     now_time=-1
@@ -15,9 +11,8 @@ def check(x, y, zx, zy, cross, time):
         now_time = (int)(a3)
     else:
         now_time = (int)(a4)
-
+        
     while now_time < time:
-        # cross.append([a2, a3])  # 현재방향, 현재 방향으로 끝마쳐지는 시간
         op = ""
         if now_dir == "|":
             op = "-"
@@ -27,7 +22,6 @@ def check(x, y, zx, zy, cross, time):
             now_dir = op
             now_time = now_time + (int)(a4)
         else:
-            next = now_time + (int)(a3)
             now_dir = op
             now_time = now_time + (int)(a3)
 
@@ -44,9 +38,7 @@ def check(x, y, zx, zy, cross, time):
                 return time
             if x == zx + 1 and y == zy:
                 return time
-
     # 이렇게 해서 어떻게 해서든 넘어 갈수는 있겠구나
-
     return now_time + 1
 
 
@@ -55,13 +47,8 @@ def game(x, y, graph, next, n, m):
     # 걸리는 최소 시간을 파악 하고자 한다.
     # 이를 찾기 위해서 방법을 파악 해보도록 하자
     # 교차로를 관리하는 얘들을 따로 만들어야 할듯
-
     q = deque()
-
-    finalx = -1
-    finaly = -1
     visit[x][y] = 0
-
     q.append((0, x, y))
     dx = [-1, 0, 1, 0]
     dy = [0, 1, 0, -1]
@@ -71,9 +58,7 @@ def game(x, y, graph, next, n, m):
         for l in range(4):
             zx = a2 + dx[l]
             zy = a3 + dy[l]
-
             if 0 <= zx < n and 0 <= zy < m:
-
                 if graph[zx][zy] != ".":
                     temp_time = a1 + 1
 
@@ -98,11 +83,11 @@ def game(x, y, graph, next, n, m):
     else:
         print(last)
 
-
 while True:
     m, n = map(int, input().split())
     if m == 0 and n == 0:
         break
+
     graph = []
     check_temp = -1
     do = ["#", ".", "A", "B"]
