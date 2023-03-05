@@ -1,54 +1,36 @@
-import sys, copy, heapq
-import heapq, math
-from itertools import permutations, combinations, product
-from collections import deque
-from itertools import product
+import sys
+input = sys.stdin.readline
 
-#a=list(product(i,repeat=len(powers)))
-#b=list(product(*a)) #리스트 안에 있는 원소들끼리 조합
-
-
-#input = sys.stdin.readline
-#01020306523합격8
-
-n,x=map(int,input().split())
-tot=[]
+to=[]
+n,c=map(int,input().split())
 for _ in range(n):
-    a=int(input().rstrip())
-    tot.append(a)
-tot.sort()
 
-start=0
-end=max(tot)-tot[0]
-gap=0
-while start<=end:
-    mid=(start+end)//2
+    to.append(int(input().rstrip()))
+to.sort()
+
+left=1
+right=to[-1]-to[0]+1
+def calculate(mid,to):
     count=1
-    value=tot[0]
-    for l in range(1,len(tot)):
-        if tot[l]>=value+mid:
-            value=tot[l]
+    l=1
+    before=to[0]
+    while l<n:
+        temp=to[l]-before
+        if temp>=mid:
+            before=to[l]
             count+=1
-    if count>=x:
-        gap=mid
-        start=mid+1
+        l+=1
+    return count
+
+answer=sys.maxsize
+while left<=right:
+    mid=(left+right)//2
+    cal=calculate(mid,to)
+    if cal==c:
+        answer=min(answer,mid)
+    if cal<c:
+        right=mid-1
     else:
-        end=mid-1
-print(gap)
+        left=mid+1
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print(left-1)
