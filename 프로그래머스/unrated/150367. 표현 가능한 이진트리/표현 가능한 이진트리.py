@@ -1,39 +1,33 @@
+def makeBinaryNumber(number):
+    reverseBinaryNumber = []
+    while number != 1:
+        reverseBinaryNumber.append(str(number % 2))
+        number //= 2
+    reverseBinaryNumber.append("1")
+    binaryNumber = ''.join(reverseBinaryNumber[::-1])
+    binaryTreeSize = 1
+    while binaryTreeSize < len(binaryNumber):
+        binaryTreeSize = (binaryTreeSize + 1) * 2 - 1
+    binaryNumber = "0" * (binaryTreeSize - len(binaryNumber)) + binaryNumber
+    return binaryNumber
 
-
-
-
-def search(number) :
-    length = len(number)
-    if length == 1 or '1' not in number or '0' not in number:
-        return True
-    
-    mid = length // 2
-    if number[mid] == '0':
-        return False
-    
-    return search(number[:mid]) and search(number[mid+1:])
-
+def checkPossible(start, end, binaryString):
+    if start == end:
+        return binaryString[start]
+    mid = (start + end) // 2
+    left = checkPossible(start, mid-1, binaryString)
+    if not left or (binaryString[mid] == "0" and left == "1"): return False
+    right = checkPossible(mid+1, end, binaryString)
+    if not right or (binaryString[mid] == "0" and right == "1"): return False
+    if left == "0" and right == "0" and binaryString[mid] == "0": return "0"
+    return "1"
 
 def solution(numbers):
     answer = []
-    perfect = [ 2**x - 1 for x in range(50)]
-    
-    for l in numbers:
-        now=bin(l)[2:]
-        now_len=len(now)
-        for k in perfect:
-            if now_len<=k:
-                now='0'*(k-now_len)+now
-                break
-            
-        next=search(now)
-        if next==1:
+    for number in numbers:
+        binaryNumber = makeBinaryNumber(number)
+        if checkPossible(0, len(binaryNumber)-1, binaryNumber):
             answer.append(1)
         else:
             answer.append(0)
-    
-    
-    
-    
-    
     return answer
