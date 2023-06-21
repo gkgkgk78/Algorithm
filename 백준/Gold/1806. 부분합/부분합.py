@@ -1,35 +1,35 @@
 import sys
-sys.setrecursionlimit(100000)
+
 input = sys.stdin.readline
 
+n, s = map(int, input().split())
+e = list(map(int, input().split()))
 
-a,b=map(int,input().split())
+left = 0
+right = 0
 
-t=list(map(int,input().split()))
+now = e[0]
+
+total = sys.maxsize
+if now >= s:
+    total = min(total, right - left + 1)
 
 
+while left <= right:
 
-count=0
-inte=0
-start=0
-end=0
-g=[]
-for start in range(a):
+    if now < s:
+        right += 1
+        if right>=n:
+            break
+        now += e[right]
+    else:
+        now -= e[left]
+        left += 1
 
-    while inte<b and end<a :
-        inte=t[end]+inte
-        end+=1
+    if now >= s:
+        total = min(total, right - left+1)
 
-    if inte>=b:
-       count=count+1
-       t23=end-start
-       g.append(t23)
-    inte=inte-t[start]
-
-if count==0:
-    print(count)
+if total == sys.maxsize:
+    print(0)
 else:
-    print(min(g))
-
-# print(count,g)
-# print(min(g))
+    print(total)
