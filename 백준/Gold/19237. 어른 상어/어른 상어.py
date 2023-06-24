@@ -1,14 +1,14 @@
 import sys
+
 input = sys.stdin.readline
-shark_graph = []
+
 # 향기를 나타내는 것은 상어의 번호도 같이 가지고 있어야 함
 # 이동을 하려고 할시에 갈수 있는 칸이 여러개라면은 그때 우선순위가 작동 되는 것임
 
 n, m, k_smell = map(int, input().split())  # k는 향기
 shark = [[-1, -1, -1, -1]]  # 상어누군지, x,y,방향
 smell_graph = [[[] for _ in range(n)] for _ in range(n)]  # 어떤 상어 건지, 지금 남은 카운트
-if k_smell==1:
-    k_smell=0
+
 for i in range(n):
     e = list(map(int, input().split()))
     for j in range(len(e)):
@@ -105,7 +105,6 @@ def move(shark_vertex):
 
 while 1:
 
-
     for l in range(1, m + 1):
         if len(shark[l]) == 0:
             continue
@@ -115,12 +114,10 @@ while 1:
     for i in range(n):
         for j in range(n):
             if len(smell_graph[i][j]) > 0:
-                if smell_graph[i][j][1] <=1:
+                if smell_graph[i][j][1] <= 1:
                     smell_graph[i][j] = []
                 else:
                     smell_graph[i][j][1] -= 1
-
-
 
     # 향기 배치 시작
     for l in range(1, m + 1):
@@ -145,15 +142,12 @@ while 1:
         nx, ny, dir = shark[l]
         smell_graph[nx][ny] = [l, k_smell]
 
-
-
-    time+=1
+    time += 1
     # 상어 가운트가 1이 되면은 넘추면 됨
     if shark_count == 1:
         break
-    if time>1000:
+    if time > 1000:
         break
-
 
 if time <= 1000:
     print(time)
