@@ -1,5 +1,5 @@
 import sys
-from copy import deepcopy
+
 
 input = sys.stdin.readline
 
@@ -39,7 +39,7 @@ def copp():
             for k in graph[i][j]:
                 if k[0] != "fish":
                     continue
-                temp.append(deepcopy(k))
+                temp.append(k)
 
     return temp
 
@@ -124,6 +124,7 @@ def move_shark(i1):
     fy = [-1, 0, -1, 0, 1]
     q = []
     visit = [[0] * 4 for _ in range(4)]
+    check = -sys.maxsize
     for i in range(len(fin)):
         e = fin[i]
 
@@ -152,9 +153,10 @@ def move_shark(i1):
             visit[k1][k2] = 0
 
         if e_count == 0:
-            q.append([-fish_count, i, zx, zy])
-
-    q = sorted(q, key=lambda x: (x[0], x[1]))
+            if fish_count > check:
+                check = fish_count
+                q = []
+                q.append([-fish_count, i, zx, zy])
 
     ccount, key1, zx, zy = q[0]
     tx = shark_x
@@ -198,7 +200,7 @@ for i1 in range(s):
     # 이제 두번 전 연습에서 생긴 물고기의 냄새를 제거 하도록 해야함
 
     delete_smell()
-    
+
     copy_fish(temp_fish)
 
 ans = 0
