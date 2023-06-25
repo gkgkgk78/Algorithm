@@ -17,9 +17,8 @@ for _ in range(m):
     e = list(map(int, input().split()))
     for k in range(len(e)):
         e[k] -= 1
-    e = ["fish"] + e
     fish.append(e)
-    graph[e[1]][e[2]].append(e)
+    graph[e[0]][e[1]].append(e)
 
 shark_x, shark_y = map(int, input().split())
 shark_x -= 1
@@ -33,8 +32,6 @@ def copp():
             if len(graph[i][j]) == 0:
                 continue
             for k in graph[i][j]:
-                if k[0] != "fish":
-                    continue
                 temp.append(k)
 
     return temp
@@ -48,7 +45,7 @@ def move():
     for i in range(4):
         for j in range(4):
             for k in range(len(graph[i][j])):
-                fish, x, y, dir = graph[i][j][k]
+                x, y, dir = graph[i][j][k]
                 # 물고기 이니 이제 이동을 할수 있다는 것을 의미를 함.
                 temp_before.append((i, j))
                 # 상어가 있는칸, 물고기 냄새가 있는칸, 격자의 범위 벗어나는 칸으로 이동 불가
@@ -75,15 +72,15 @@ def move():
                     if temp_dir == -1:
                         temp_dir = 7
                 if temp_check == 0:  # 못찾은 경우를 의미를 함
-                    temp_next.append([fish, x, y, dir])  # 우선은 이렇게 해보자구,방향 바꿔야 할수도 있음
+                    temp_next.append([x, y, dir])  # 우선은 이렇게 해보자구,방향 바꿔야 할수도 있음
                 else:
-                    temp_next.append([fish, temp_x, temp_y, temp_dir])
+                    temp_next.append([temp_x, temp_y, temp_dir])
 
     for a1, a2 in temp_before:
         graph[a1][a2] = []
 
     for e in temp_next:
-        graph[e[1]][e[2]].append(e)
+        graph[e[0]][e[1]].append(e)
 
 
 fin = []
@@ -133,7 +130,7 @@ def move_shark(i1):
             zy += fy[dir]
             if 0 <= zx < 4 and 0 <= zy < 4:
                 for s in graph[zx][zy]:
-                    if s[0] == "fish" and visit[zx][zy] == 0:
+                    if visit[zx][zy] == 0:
                         fish_count += len(graph[zx][zy])
                         visit[zx][zy] = 1
                         ttemp.append((zx, zy))
@@ -174,7 +171,7 @@ def delete_smell():
 
 def copy_fish(t):
     for e in t:
-        graph[e[1]][e[2]].append(e)
+        graph[e[0]][e[1]].append(e)
 
 
 for i1 in range(s):
