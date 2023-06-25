@@ -1,6 +1,4 @@
 import sys
-
-
 input = sys.stdin.readline
 
 m, s = map(int, input().split())
@@ -25,9 +23,6 @@ for _ in range(m):
 shark_x, shark_y = map(int, input().split())
 shark_x -= 1
 shark_y -= 1
-
-
-# graph.append(["shark",shark_x,shark_y])#x,y
 
 
 def copp():
@@ -88,7 +83,6 @@ def move():
                 else:
                     temp_next.append([fish, temp_x, temp_y, temp_dir])
 
-    temp_before = set(temp_before)
     for a1, a2 in temp_before:
         graph[a1][a2] = []
 
