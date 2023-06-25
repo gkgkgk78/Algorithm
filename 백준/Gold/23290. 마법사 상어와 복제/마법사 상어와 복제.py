@@ -1,4 +1,5 @@
 import sys
+
 input = sys.stdin.readline
 
 m, s = map(int, input().split())
@@ -46,15 +47,10 @@ def move():
     temp_next = []
     for i in range(4):
         for j in range(4):
-            if len(graph[i][j]) == 0:
-                continue
             for k in range(len(graph[i][j])):
                 fish, x, y, dir = graph[i][j][k]
-                if fish != "fish":
-                    continue
                 # 물고기 이니 이제 이동을 할수 있다는 것을 의미를 함.
                 temp_before.append((i, j))
-
                 # 상어가 있는칸, 물고기 냄새가 있는칸, 격자의 범위 벗어나는 칸으로 이동 불가
                 temp_dir = dir
                 temp_check = 0
@@ -110,6 +106,8 @@ def shark_total(cnt):
 
 shark_total(0)
 
+visit = [[0] * 4 for _ in range(4)]
+
 
 def move_shark(i1):
     global shark_x, shark_y
@@ -117,7 +115,7 @@ def move_shark(i1):
     fx = [-1, -1, 0, 1, 0]
     fy = [-1, 0, -1, 0, 1]
     q = []
-    visit = [[0] * 4 for _ in range(4)]
+
     check = -sys.maxsize
     for i in range(len(fin)):
         e = fin[i]
@@ -200,8 +198,6 @@ for i1 in range(s):
 ans = 0
 for i in range(4):
     for j in range(4):
-        for e in graph[i][j]:
-            if e[0] == "fish":
-                ans += 1
+            ans += len(graph[i][j])
 
 print(ans)
