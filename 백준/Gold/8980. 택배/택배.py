@@ -1,36 +1,50 @@
 import sys
-input = sys.stdin.readline
-n,m=map(int,input().split()) 
-#우선은 각 마을에 오는 보내는 마을을 구한후에,
-mo=[0 for _ in range(n+1)]
-t=int(input().rstrip())
-total=[]
-for _ in range(t):
-    a1,a2,a3=map(int,input().split())
-    total.append((a1,a2,a3))
+input=sys.stdin.readline
 
+n,c=map(int,input().split())
+e=int(input().rstrip())
 
-total=sorted(total,key=lambda x:(x[1]))
+total=[list(map(int,input().split())) for _ in range(e)]
+
+#정렬하는 과정 보내는 마을과 받는 마을 가까운 순으로 정렬, 한후 받는 마을 이 큰 순으로
+#오게 정렬을 한다.
+total=sorted(total,key=lambda x:(x[1]-x[0],-x[1]))
+# print(total)
+
 
 answer=0
-for i in range(t):
 
-    a1,a2,a3=total[i]
-    temp=0
-    for l in range(a1,a2):
-        temp=max(temp,mo[l])
-    now_max=temp
-    #있는 값중에 최대값을 찾은 후에
-    can=0
-    if(a3+now_max<=m):
-        can=a3
-    else:
-        can=m-now_max
+#각 마을에서 출발하며 받는 마을 전까지 얼만큼의 택배를 가져 가야 할지를 담을 배열
+city=[0 for _ in range(n)]
 
-    if(can>0):
-        answer+=can
-        for l in range(a1,a2):
-            mo[l]+=can
+for i in total:
+    send,get,size=i#a1:보내는 마을, a2: 받는 마을 
+    
+    #인덱스 조정하는 과정(city배열과 동일시 하기 위해서)
+    send-=1
+    get-=1
 
+    #city배열에서 보내는 마을 부터 받는 마을전 까지의 인덱스 에 해당되는 값들을
+    #탐색을 하며 가지고 있는 최댓값을 파악을 하여 현재 뽑힌 size에서 얼만큼을
+    #들고 갈수 있는지를 파악하고자 한다
+    temp_size=0#경로상에서 최댓값 파악하기 위한 변수
+    for l in range(send,get):
+        temp_size=max(temp_size,city[l])
+
+    #즉, 경로상에서 가진 최댓값이 배송 가능한 최대 박스 수를 넘을시엔
+    #나는 담고 싶어도 담을수 없으니 다음 순서에 해당 되는 얘로 넘어감
+    if(temp_size>=c):
+        continue
+
+    #담을수 있는 만큼을 계산하는 변수
+    temp_cal=c-temp_size
+
+    #계산한 값에 따라 얼만큼 담는지 계산
+    if temp_cal<=size:
+        size=temp_cal
+
+    answer+=size
+    for l in range(send,get):
+       city[l]+=size
 
 print(answer)
