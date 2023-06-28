@@ -1,35 +1,34 @@
-from collections import deque
 import sys
-#sys.stdin = open("input.txt")
-N, K = map(int, input().split())
-MAX_SIZE = 100001
-MAP = [[-1, 0] for _ in range(MAX_SIZE)]
-MAP1 = [-1, 0]*(10)
+from collections import deque
 
-q = deque()
-q.append(N)
-MAP[N][0] = 0#여기에는 걸린 시간의 수를 저장하는것을 의미한다
-MAP[N][1] = 1#여기에는 도달했던 경우의수를 저장한다
+input = sys.stdin.readline
+visit = [sys.maxsize] * (100001)
 
-while q:
-    x = q.popleft()
-
-    if x==K:
-        break
-    for nx in [ 2*x]:
-        if 0 <= nx < MAX_SIZE:
-            if MAP[nx][0] == -1:
-                q.appendleft(nx)
-                MAP[nx][0] = MAP[x][0]
-                MAP[nx][1] = MAP[x][1]
-
-    for nx in [ x + 1, x - 1]:
-        if 0 <= nx < MAX_SIZE:
-            if MAP[nx][0] == -1:
-                q.append(nx)
-                MAP[nx][0] = MAP[x][0]+1
-                MAP[nx][1] = MAP[x][1]
+n, k = map(int, input().split())
 
 
-print(MAP[K][0])
-#print(MAP[K][1])
+def bfs():
+    q = deque()
+    visit[n] = 0
+    q.append((n, 0))
+
+    while q:
+        vertex, time = q.popleft()
+        if vertex == k:
+            print(time)
+            return
+        dx = [-1, 1]
+        for i in range(2):
+            z = vertex + dx[i]
+            if 0 <= z <= 100000:
+                if time + 1 < visit[z]:
+                    visit[z] = time + 1
+                    q.append((z, time + 1))
+        z = vertex * 2
+        if 0 <= z <= 100000:
+            if time < visit[z]:
+                visit[z] = time
+                q.appendleft((z, time))
+
+
+bfs()
