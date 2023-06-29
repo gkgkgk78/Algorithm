@@ -6,9 +6,8 @@ n=int(input().rstrip())
 e=[]
 for _ in range(n):
     a1,a2=map(int,input().split())
-    e.append([a1,a2])
-e=sorted(e,key=lambda x:x[0])
-
+    e.append((a1,a2))
+e.sort()
 
 ans=0
 left=e[0][0]
