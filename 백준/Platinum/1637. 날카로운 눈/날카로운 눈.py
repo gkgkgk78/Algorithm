@@ -16,7 +16,7 @@ def find(x):
     return count
 
 left=0
-right=2147483648
+right=2147483647
 
 for _ in range(n):
     a1,a2,a3=map(int,input().split())
