@@ -7,9 +7,10 @@ m = 8
 t = int(input().rstrip())
 gpin = sys.maxsize
 
-
-def dfs(graph):
+def dfs(graph, pin):
     global gpin
+
+    gpin = min(gpin, pin)
 
     dx = [0, -1, 0, 1]
     dy = [-1, 0, 1, 0]
@@ -23,40 +24,35 @@ def dfs(graph):
                     zy = j
                     zx += dx[k]  # 찾은 핀
                     zy += dy[k]
-                    if 0 <= zx < 5 and 0 <= zy < 9:
-                        if graph[zx][zy] == "o":
-                            tx = zx + dx[k]
-                            ty = zy + dy[k]
-                            if 0 <= tx < 5 and 0 <= ty < 9:
-                                if graph[tx][ty] == ".":
-                                    graph[i][j] = "."
-                                    graph[zx][zy] = "."
-                                    graph[tx][ty] = "o"
-                                    dfs(graph)
-                                    graph[i][j] = "o"
-                                    graph[zx][zy] = "o"
-                                    graph[tx][ty] = "."
-    cc = 0
-    for i in range(5):
-        for j in range(9):
-            if graph[i][j] == "o":
-                cc += 1
+                    if 0 > zx or zx >= 5 or 0 > zy or zy >= 9:
+                        continue
+                    if graph[zx][zy] == "o":
+                        tx = zx + dx[k]
+                        ty = zy + dy[k]
+                        if 0 <= tx < 5 and 0 <= ty < 9:
+                            if graph[tx][ty] != ".":
+                                continue
+                            graph[i][j] = "."
+                            graph[zx][zy] = "."
+                            graph[tx][ty] = "o"
+                            dfs(graph, pin - 1)
+                            graph[i][j] = "o"
+                            graph[zx][zy] = "o"
+                            graph[tx][ty] = "."
 
-    gpin = min(gpin, cc)
- 
 
 for a in range(t):
     graph = []
     fin_count = 0
     gpin = sys.maxsize
 
-    for _ in range(n):
+    for _ in range(5):
         e = list(map(str, input().rstrip()))
         graph.append(e)
         for i in e:
             if i == "o":
                 fin_count += 1
-    dfs(graph)
+    dfs(graph, fin_count)
     print(gpin, fin_count - gpin)
     if a == t - 1:
         break
