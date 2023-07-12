@@ -34,7 +34,7 @@ def bfs():
                     zx = i + dx[k]
                     zy = j + dy[k]
                     if 0 < zx <= n and 0 < zy <= n:
-                        if visit[zx][zy] == 1:
+                        if visit[zx][zy] == 1 and light[zx][zy]==1:
                             q.append((zx, zy))
         for k in range(4):
             zx = a1 + dx[k]
