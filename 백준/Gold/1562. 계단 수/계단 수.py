@@ -21,6 +21,6 @@ for i in range(2, n + 1):
             dp[i][j][(1<<j)|k]%=div
 ans=0
 for i in range(1,10):
-    ans+=dp[n][i][(1<<10)-1]%div
+    ans+=dp[n][i][(1<<10)-1]
     ans%=div
 print(ans)
