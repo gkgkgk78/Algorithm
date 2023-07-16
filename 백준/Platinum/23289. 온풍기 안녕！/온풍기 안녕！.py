@@ -1,6 +1,6 @@
 import sys
 from collections import deque
-
+#2시간 50분 걸림, 다른 것보다 100넘는 종료 조건 잘못 이해해서 시간 날림...
 input = sys.stdin.readline
 
 r, c, k = map(int, input().split())
