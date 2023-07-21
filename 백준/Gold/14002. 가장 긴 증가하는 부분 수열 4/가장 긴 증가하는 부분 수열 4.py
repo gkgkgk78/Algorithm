@@ -38,12 +38,9 @@ for i in range(1,n):
             dp[h]=now
 last=[-1]*(index+1)
 print(index+1)
-tt=0
 for i in range(len(total)-1,-1,-1):
     t=total[i]
     if index==total[i]:
-        last[tt]=e[i]
-        tt+=1
+        last[index]=e[i]
         index-=1
-last.reverse()
 print(*last)
