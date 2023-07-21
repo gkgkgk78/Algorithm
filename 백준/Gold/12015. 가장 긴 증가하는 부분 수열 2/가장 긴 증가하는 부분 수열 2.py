@@ -1,39 +1,41 @@
 import sys
-sys.setrecursionlimit(100000)
+
+
 input = sys.stdin.readline
+n=int(input().rstrip())
+e=list(map(int,input().split()))
 
-
-a= int(input())
-t=list(map(int,input().split())) # 나무 수, 필요한 나무 길이
-
-
-dp=[]
-dp1=[]
-dp1.append(t[0])
-
-def chch(ff,start,end):
-
-    while start <=end:
-        mid=(start+end)//2
-
-        if dp1[mid]<ff:
-            start=mid+1
+dp=[0]*(n+1)
+dp[0]=e[0]
+index=0
+total=[-1]*(n)
+total[0]=0
+def binary(now):
+    left=-1
+    right=index+1
+    while left+1<right:
+        mid=(left+right)//2
+        if now<=dp[mid]:
+            right=mid
         else:
-            end=mid-1
-    return start
+            left=mid
+    return right
 
-
-
-
-
-for i in range (1,a):
-    gg=len(dp1)
-    if t[i]>dp1[gg-1]:
-        dp1.append(t[i])
+for i in range(1,n):
+    now=e[i]
+    if dp[index]<now:
+        index+=1
+        dp[index]=now
+        total[i]=index
     else:
-        f=chch(t[i],0,gg-1)
-        dp1[f]=t[i]
+        h=binary(now)
+        if h!=-1:
+            total[i]=h
+            dp[h]=now
+last=[-1]*(index+1)
+for i in range(len(total)):
+    t=total[i]
+    if last[t]==-1:
+        last[t]=e[i]
 
-
-print(len(dp1))
-
+print(index+1)
