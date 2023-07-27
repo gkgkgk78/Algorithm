@@ -1,5 +1,4 @@
 import sys
-from collections import deque
 input=sys.stdin.readline
 n=int(input().rstrip())
 crane=list(map(int,input().split()))
@@ -19,6 +18,8 @@ else:
         for i in range(n):
             n1=crane[i]
             if len(work)>0:
+                if n1<work[-1]:
+                    continue
                 for j in work:
                     peek=j
                     if n1>=peek:
