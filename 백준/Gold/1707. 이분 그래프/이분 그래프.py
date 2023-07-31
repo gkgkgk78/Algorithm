@@ -1,75 +1,51 @@
-import sys,copy
+import sys
 from collections import deque
 
-input=sys.stdin.readline
-sys.setrecursionlimit(10**5)
+input = sys.stdin.readline
+
+t = int(input().rstrip())
 
 
-
-def dfs(v):
-    ok=0
-    q=deque()
-    q.append(v)
-    visit[v]=1
+def bfs(vertex, check, graph, v):
+    q = deque()
+    visit = [0] * (v + 1)
+    visit[vertex] = 1
+    check[vertex] = 0
+    q.append(vertex)
     while q:
-        g=q.popleft()
-        if visit[g] == 1:
-            ok = -1
-        elif visit[g]==-1:
-            ok = 1
-
-        for i in graph[g]:
-            if visit[i]==0:
-                q.append(i)
-                visit[i]=ok
-            else:
-                
-                    if visit[i]==-1:
-                        if visit[g]==-1:
-                            return 0
-                    elif visit[i]==1:
-                        if visit[g]==1:
-                            return 0
+        a1 = q.popleft()
+        n1 = check[a1]
+        tt = -1
+        if n1 == 0:
+            tt = 1
+        else:
+            tt = 0
+        for t1 in graph[a1]:
+            if visit[t1] == 0 and check[t1] == -1:
+                visit[t1] = 1
+                q.append(t1)
+                check[t1] = tt
 
 
-    return 1
+for _ in range(t):
+    v, e = map(int, input().split())
+    graph = [[] for _ in range(v + 1)]
+    nex = []
+    for _ in range(e):
+        a1, a2 = map(int, input().split())
+        graph[a1].append(a2)
+        graph[a2].append(a1)
+        nex.append((a1, a2))
+    check = [-1] * (v + 1)
+    for i in range(1, v + 1):
+        if check[i] != -1:
+            continue
+        bfs(i, check, graph, v)
 
-
-h=int(input())
-gg=h
-while gg>0:
-    vertex,edge=map(int,input().split())
-    graph = [[] for _ in range(0, vertex+ 1)]
-    visit = [0] * (vertex + 1)
-    for i in range(edge):
-        t1,t2=map(int,input().split())
-        graph[t1].append(t2)
-        graph[t2].append(t1)
-
-
-    jk=0
-    for k in range (1,vertex+1):
-        if visit[k]==0:
-            jk=dfs(k)
-        if jk==0:
-            print("NO")
+    ans = "YES"
+    for i in range(e):
+        a1, a2 = nex[i]
+        if check[a1] == check[a2]:
+            ans = "NO"
             break
-    if jk==1:
-        print("YES")
-
-
-
-    gg=gg-1
-
-
-
-
-
-
-
-
-
-
-
-
-
+    print(ans)
