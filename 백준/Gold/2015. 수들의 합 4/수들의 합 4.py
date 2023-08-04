@@ -9,6 +9,7 @@ find[e[0]] = 1
 ans = 0
 if e[0] == k:
     ans += 1
+
 for l in range(1, n):
     e[l] += e[l - 1]
     next = e[l] - k
