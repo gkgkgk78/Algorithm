@@ -19,20 +19,6 @@ for i in range(n):
             graph[i][j] = (int)(graph[i][j])
 
 
-def find(x, y):
-    dx = [-1, -1, -1, 0, 0, 1, 1, 1]
-    dy = [-1, 0, 1, -1, 1, -1, 0, 1]
-    c = 0
-    for i in range(len(dx)):
-        zx = dx[i] + x
-        zy = dy[i] + y
-        if 0 <= zx < n and 0 <= zy < m:
-            if graph[zx][zy] == ".":
-                c += 1
-
-    return c
-
-
 while 1:
     cnt = 0
     dx = [-1, -1, -1, 0, 0, 1, 1, 1]
@@ -41,17 +27,15 @@ while 1:
     nex = deque()
     while test:
         i, j = test.popleft()
-
-        for a in range(len(dx)):
+        for a in range(8):
             zx = dx[a] + i
             zy = dy[a] + j
             if 0 <= zx < n and 0 <= zy < m:
-                if graph[zx][zy] != ".":
-                    if 1 <= (int)(graph[zx][zy]) <= 8:
-                        graph[zx][zy] -= 1
-                        if graph[zx][zy] == 0:
-                            nex.append((zx, zy))
-                            cnt += 1
+                if graph[zx][zy] !=0:
+                    graph[zx][zy] -= 1
+                    if graph[zx][zy] == 0:
+                        nex.append((zx, zy))
+                        cnt += 1
     if cnt == 0:
         break
     time += 1
