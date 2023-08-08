@@ -1,21 +1,15 @@
 import sys
-import math
 input = sys.stdin.readline
+n,m=map(int,input().split())
+dp=[1]*(m+1)
+for i in range(2,m+1):
+    t=i
+    while 1:
+        if t>m:
+            break
+        dp[t]+=1
+        t+=i
 
-m,n=map(int,input().split())
-
-def check(m):
-
-    for i in range(2,int(math.sqrt(m))+1):
-        if m%i==0:
-            return 0
-    return 1
-
-
-
-for l in range(m,n+1):
-    if l==1:
-        continue
-    now=check(l)
-    if now==1:
-        print(l)
+for i in range(n,m+1):
+    if dp[i]==2:
+        print(i)
