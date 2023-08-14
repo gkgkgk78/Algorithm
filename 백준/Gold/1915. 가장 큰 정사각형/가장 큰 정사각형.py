@@ -1,35 +1,24 @@
 import sys
-from collections import deque
-input=sys.stdin.readline
 
+input = sys.stdin.readline
 
-n,m=map(int,input().split())
-graph=[]
-sumz=0
+n, m = map(int, input().split())
+
+arr = []
+dp = [[0] * m for _ in range(n)]
+
 for _ in range(n):
-    e=list(map(int,input().rstrip()))
-    graph.append(e)
-    sumz+=sum(e)
-visit=[[1]*m for _ in range(n)]
-dx=[-1,-1,0]
-dy=[-1,0,-1]
-if sumz==0:
-    ans=0
-else:
-    ans=1
+    arr.append(list(map(int, list(input().rstrip()))))
+
+answer = 0
 for i in range(n):
     for j in range(m):
-        if graph[i][j]!=0:
-            temp=0
-            total=[]
-            for k in range(3):
-                zx=dx[k]+i
-                zy=dy[k]+j
-                if not(0<=zx<n and 0<=zy<m):
-                    temp=1
-                    break
-                total.append(graph[zx][zy])
-            if temp==0:
-                graph[i][j]=min(total)+1
-                ans=max(ans,graph[i][j])
-print(ans*ans)
+        if i == 0 or j == 0:
+            dp[i][j] = arr[i][j]
+        elif arr[i][j] == 0:
+            dp[i][j] = 0
+        else:
+            dp[i][j] = min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]) + 1
+        answer = max(dp[i][j], answer)
+
+print(answer * answer)
