@@ -11,55 +11,30 @@ for _ in range(n):
 ans = -sys.maxsize
 
 
-def check(visit):
-    global ans
-    visit1 = [[0] * (m) for _ in range(n)]
-    ne = 0
-    for i in range(n):
-        for j in range(m):
-            if visit1[i][j] == 1:
-                continue
-            temp = ""
-            zx = i
-            zy = j
-            if visit[i][j] == 0:
-                # 가로
-                while 1:
-                    if visit[zx][zy] == 1:
-                        break
-                    visit1[zx][zy] = 1
-                    temp += str(graph[zx][zy])
-                    zy += 1
-                    if zy == m:
-                        break
+
+for i in range(1<<n*m):
+    result=0
+    #가로합 계산
+    for j in range(n):
+        temp=0
+        for k in range(m):
+            idx=j*m+k
+            if i&(1<<idx)!=0:
+                temp=temp*10+(graph[j][k])
             else:
-                while 1:
-                    if visit[zx][zy] == 0:
-                        break
-                    visit1[zx][zy] = 1
-                    temp += str(graph[zx][zy])
-                    zx += 1
-                    if zx == n:
-                        break
-            ne += (int)(temp)
-    ans = max(ans, ne)
+                result+=temp
+                temp=0
+        result+=temp
+    for j in range(m):
+        temp=0
+        for k in range(n):
+            idx=k*m+j
+            if i&(1<<idx)==0:
+                temp=temp*10+(graph[k][j])
+            else:
+                result+=(int)(temp)
+                temp=0
+        result += temp
 
-
-def dfs(x, y, visit):
-    if (x == n - 1 and y == m):
-        check(visit)
-        return
-    zx = x
-    zy = y
-    if zy == m:
-        zx += 1
-        zy = 0
-    # 가로
-    visit[zx][zy] = 0
-    dfs(zx, zy + 1, visit)
-    # 세로
-    visit[zx][zy] = 1
-    dfs(zx, zy + 1, visit)
-
-dfs(0, 0, visit)
+    ans=max(ans,result)
 print(ans)
