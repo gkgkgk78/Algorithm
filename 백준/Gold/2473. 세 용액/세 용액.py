@@ -1,54 +1,27 @@
-import sys, copy
-from itertools import combinations
-from collections import deque
+import sys
 
 input = sys.stdin.readline
 
 
 n=int(input().rstrip())
-
-g=list(map(int,input().split()))
-
-g.sort()
-
-left=0
-right=n-1
-result=-50000000000000
+e=list(map(int,input().split()))
+e.sort()
 ans=[]
-if n == 3:
-    print(*sorted(g))
-    sys.exit()
-
-for i in range(0,n-2):
-    mid=i+1
+an=sys.maxsize
+for i in range(n-2):
+    now=e[i]
+    left=i+1
     right=n-1
-    left=i
-    while mid<right:
-        tmp=g[right]+g[mid]+g[left]
-        if abs(tmp) <abs(result):
-                ans=[]
-                ans.append(g[left])
-                ans.append(g[mid])
-                ans.append(g[right])
-                result=g[right]+g[mid]+g[left]
-                if result==0:
-                    print(*ans)
-                    exit(0)
-
-        if g[right]+g[mid]+g[left]<0:
-                mid=mid+1
-        elif g[right]+g[mid]+g[left]>0:
-                right-=1
+    while left<right:
+        sumz=e[i]+e[left]+e[right]
+        if abs(sumz) < an:
+            ans=[e[i],e[left],e[right]]
+            an=abs(sumz)
+        if sumz==0:
+          print(e[i],e[left],e[right])
+          sys.exit(0)
+        elif sumz<0:
+          left+=1
         else:
-            print(*ans)
-            exit(0)
-
-
+          right-=1
 print(*ans)
-
-
-
-
-
-
-
