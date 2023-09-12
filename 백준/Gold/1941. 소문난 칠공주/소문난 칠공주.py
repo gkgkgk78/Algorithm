@@ -1,69 +1,57 @@
 import sys
+from itertools import combinations
 from collections import deque
-
 input = sys.stdin.readline
-graph = []
-dasom = []
-total = []
-for i in range(5):
-    e = list(map(str, input().rstrip()))
-    for j in range(5):
-        total.append((i, j))
-        if e[j] == "S":
-            dasom.append([i, j])
 
+graph = []
+for _ in range(5):
+    e = list(map(str, input().rstrip()))
     graph.append(e)
 
-isselected = [-1] * (7)
-to = 0
+total = []
+for i in range(5):
+    for j in range(5):
+        total.append((i, j))
 
-ans = 0
 
 
-def game(temp):
+nex=list(combinations(total,7))
+
+ans=0
+
+def bfs(li):
     global ans
-    visit = [[0] * 5 for _ in range(5)]
-    dx = [0, -1, 0, 1]
-    dy = [-1, 0, 1, 0]
-    q = deque()
-    q.append((temp[0][0], temp[0][1]))
 
+    visit=[[-1]*5 for _ in range(5)]
+
+    for i in li:
+        a1,a2=i
+        visit[a1][a2]=1
+    dx=[-1,0,1,0]
+    dy=[0,1,0,-1]
+    q=deque()
+    q.append((li[0][0],li[0][1]))
+    visit[li[0][0]][li[0][1]] = 0
+    cu=1
     while q:
-        a1, a2 = q.popleft()
-        visit[a1][a2] = 1
+        a1,a2=q.popleft()
         for i in range(4):
-            zx = a1 + dx[i]
-            zy = a2 + dy[i]
-            if 0 <= zx < 5 and 0 <= zy < 5:
-                if (zx, zy) in temp and visit[zx][zy] == 0:
-                    visit[zx][zy] = 1
-                    q.append((zx, zy))
+            zx=dx[i]+a1
+            zy=dy[i]+a2
+            if 0<=zx<5 and 0<=zy<5 and visit[zx][zy]==1:
+                q.append((zx,zy))
+                visit[zx][zy]=0
+                cu += 1
 
-    for a1, a2 in temp:
-        if visit[a1][a2] == 0:
-            return
-    ans += 1
+    if cu==7:
+        ans+=1
 
-
-def comb(start, cnt):
-    global to
-    if cnt == 7:
-        temp = []
-        cn = 0
-        for i in isselected:
-            temp.append(total[i])
-            if graph[total[i][0]][total[i][1]] == "S":
-                cn += 1
-        if cn < 4:
-            return
-        game(temp)
-
-        return
-    for i in range(start, 25):
-        isselected[cnt] = i
-        comb(i + 1, cnt + 1)
-
-
-comb(0, 0)
+for i in nex:
+    check=0
+    for a1,a2 in i:
+        if graph[a1][a2]=="S":
+            check+=1
+    if check>=4:
+        bfs(i)
 
 print(ans)
