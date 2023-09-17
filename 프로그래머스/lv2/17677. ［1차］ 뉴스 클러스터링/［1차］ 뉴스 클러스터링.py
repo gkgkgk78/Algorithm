@@ -1,3 +1,4 @@
+#40분
 def solution(str1, str2):
     answer = 0
     
