@@ -1,4 +1,3 @@
-#45분
 import sys
 from collections import deque
 
@@ -34,43 +33,57 @@ def go(x, y, speed, dir):
         # 이제 남은 만큼 이동 해야함
         zx = x
         zy = y
-        for i in range(nex):
-
-            zx += dx[dir]
-            zy += dy[dir]
-            if zy == 0 or zy == c + 1:
+        while 1:
+            tx = zx
+            ty = zy
+            zx += dx[dir] * nex
+            zy += dy[dir] * nex
+            if zy <= 0 or zy >= c + 1:
                 if dir == 3:
                     dir = 4
                 else:
                     dir = 3
-                if zy == 0:
+                if zy <= 0:
+                    nex -= ty
                     zy = 2
                 else:
+                    nex -= (c - ty + 1)
                     zy = c - 1
+                if nex <= 0:
+                    break
+            else:
+                break
     else:
         nex = (speed) % ((r - 1) * 2)
         zx = x
         zy = y
-        for i in range(nex):
-
-            zx += dx[dir]
-            zy += dy[dir]
-            if zx == 0 or zx == r + 1:
+        while 1:
+            tx = zx
+            ty = zy
+            zx += dx[dir] * nex
+            zy += dy[dir] * nex
+            if zx <= 0 or zx >= r + 1:
                 if dir == 1:
                     dir = 2
                 else:
                     dir = 1
-                if zx == 0:
+                if zx <= 0:
+                    nex -= tx
                     zx = 2
                 else:
+                    nex -= (r - tx + 1)
                     zx = r - 1
-
+                if nex <= 0:
+                    break
+            else:
+                break
     return [zx, zy, dir]
 
 
-def move():
-    temp = [[[] for _ in range(c + 1)] for _ in range(r + 1)]
+temp = [[[] for _ in range(c + 1)] for _ in range(r + 1)]
 
+
+def move():
     # 이제 하나하나 이동을 하자
     for i in range(1, r + 1):
         for j in range(1, c + 1):
@@ -88,9 +101,11 @@ def move():
                 ee = temp[i][j]
                 ee = sorted(ee, key=lambda x: -x[2])
                 shark[i][j] = [ee[0]]
+                temp[i][j] = []
             elif len(temp[i][j]) == 1:
                 ee = temp[i][j]
                 shark[i][j] = [ee[0]]
+                temp[i][j] = []
 
 
 for z in range(1, c + 1):
@@ -99,5 +114,7 @@ for z in range(1, c + 1):
     death(z)
     # 상어 이동
     move()
-
+    # for i in shark:
+    #     print(i)
+    # print()
 print(ans)
