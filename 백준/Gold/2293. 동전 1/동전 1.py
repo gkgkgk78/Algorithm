@@ -1,14 +1,18 @@
-n, k = map(int, input().split())
-c = []
-dp = [0] * (k+1)
-dp[0]=1
-for i in range(n):
-    c.append(int(input().rstrip()))
+import sys
+from collections import deque
 
-for i in c:
-    for j in range(i,k+1):
-        dp[j]+=dp[j-i]
-if dp[k]==100001:
-    print(-1)
-else:
-    print(dp[k])
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+e = []
+for _ in range(n):
+    a = int(input().rstrip())
+    if a <= k:
+        e.append(a)
+dp = [0] * (k + 1)
+dp[0] = 1
+for i in range(len(e)):
+    now = e[i]
+    for j in range(now, k + 1):
+        dp[j] += dp[j - now]
+print(dp[k])
