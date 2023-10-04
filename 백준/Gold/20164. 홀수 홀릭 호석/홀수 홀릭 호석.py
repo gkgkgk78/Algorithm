@@ -22,7 +22,7 @@ def dfs(now, val):
         for kk in laz:
             if (int)(kk) % 2 == 1:
                 no += 1
-        dfs((str)(nex), no)
+        dfs(laz, no)
 
     else:
         # 이제 쪼갠다
@@ -31,15 +31,16 @@ def dfs(now, val):
             for j in range(i + 1, len(now) - 1):
                 for k in range(j + 1, len(now)):
                     no = val
-                    first = (int)(now[:i + 1])
+                    first = (int)(now[:j])
                     second = (int)(now[j:k])
                     third = (int)(now[k:])
                     la = first + second + third
                     laz=(str)(la)
+
                     for kk in laz:
                         if (int)(kk) % 2 == 1:
                             no += 1
-                    dfs((str)(la), no)
+                    dfs(laz, no)
 
 vv = 0
 for i in n:
