@@ -19,11 +19,12 @@ for i in range(k):
         first[ee[0]]=1
     if ee not in total:
         total[ee] = 0
-ans = 0
 
 
 def dfs(x, y, now):
-    global ans, check
+    global  check
+    if now in total:
+        total[now] += 1
     if len(now) > check:
         return
 
@@ -34,10 +35,10 @@ def dfs(x, y, now):
     for i in range(len(dx)):
         zx = x + dx[i]
         zy = y + dy[i]
+
         if 0 <= zx < n and 0 <= zy < m:
             tt = now + graph[zx][zy]
-            if tt in total:
-                total[tt] += 1
+
             dfs(zx, zy, tt)
         else:
             if zx == -1:
@@ -49,15 +50,13 @@ def dfs(x, y, now):
             if zy == m:
                 zy = 0
             tt = now + graph[zx][zy]
-            if tt in total:
-                total[tt] += 1
             dfs(zx, zy, tt)
 
 
 for i in range(n):
     for j in range(m):
         if graph[i][j]in first:
-            dfs(i, j, graph[i][j])
+            dfs(i, j, ""+graph[i][j])
 
 for i in last:
     print(total[i])
