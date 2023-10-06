@@ -13,14 +13,15 @@ if n<=2:
 
 dp = [1] * (n + 1)
 for i in range(2, n + 1):
-    now = i
-    while now <= n:
-        dp[now] += 1
-        now += i
+    if dp[i]==1:
+        now = i+i
+        while now <= n:
+            dp[now]=0
+            now += i
 e = []
 ans = 0
 for i in range(2, n + 1):
-    if dp[i] == 2:
+    if dp[i] == 1:
         e.append(i)
 
 left = 0
