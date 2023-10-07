@@ -9,19 +9,25 @@ before = [[] for _ in range(n + 1)]
 
 for _ in range(m):
     a1, a2, a3 = map(int, input().split())
+    if n == 1:
+        print(a3)
+        sys.exit()
     graph[a1].append((a2, a3))
     graph[a2].append((a1, a3))
 
 distance = [sys.maxsize] * (n + 1)
 
+ans = sys.maxsize
+
 
 def dijk(start, last):
+    global ans
     q = []
-    heapq.heappush(q, (0, start))
+    heapq.heappush(q, (0, start, 0))
     distance[start] = 0
 
     while q:
-        val, ver = heapq.heappop(q)
+        val, ver, now = heapq.heappop(q)
         if distance[ver] < val:
             continue
         for go, va in graph[ver]:
@@ -30,29 +36,14 @@ def dijk(start, last):
                     distance[go] = va + val
                     before[go].append(ver)
                     if go != last:
-                        heapq.heappush(q, (va + val, go))
-
+                        heapq.heappush(q, (va + val, go, max(now, va)))
+                    else:
+                        a2 = max(now, va)
+                        ans = min(ans, a2)
 
 dijk(start, last)
-ans = sys.maxsize
-kk = sys.maxsize
 
 
-def dfs(be, next):
-    global kk
-    if be == start:
-        return
-    for a1, a2 in graph[be]:
-        if a1 == next:
-            kk = max(kk, a2)
-            for j in before[a1]:
-                dfs(a1, j)
-            break
-
-for i in before[last]:
-    kk = -sys.maxsize
-    dfs(last, i)
-    ans = min(ans, kk)
 if ans == sys.maxsize:
     print(-1)
 else:
