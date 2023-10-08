@@ -1,3 +1,4 @@
+#50분
 import sys
 
 input = sys.stdin.readline
