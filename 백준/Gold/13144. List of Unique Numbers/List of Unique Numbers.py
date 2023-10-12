@@ -4,25 +4,27 @@ input = sys.stdin.readline
 
 n = int(input().rstrip())
 e = list(map(int, input().split()))
-
-total = [0] * (n + 1)
-count = 0
 left = 0
 right = 0
-ans = 0
-
-total[e[right]] += 1
-
-while right < n and left <= right:
-
-    ans += (right - left + 1)
+total = dict()
+total[e[right]] = 1
+ans = 1
+while 1:
     right += 1
-    if right >= n:
+    if right == n:
         break
+    if e[right] not in total:
+        total[e[right]] = 0
     total[e[right]] += 1
+    if total[e[right]] == 1:
+        ans += (right - left + 1)
+    else:
+        while 1:
+            total[e[left]]-=1
+            left+=1
+            if total[e[left]]==1 and total[e[right]]==1:
+                ans += (right - left + 1)
+                break
 
-    while total[e[right]] >= 2:
-        total[e[left]] -= 1
-        left += 1
 
 print(ans)
