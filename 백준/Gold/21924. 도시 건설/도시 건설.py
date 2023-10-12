@@ -1,6 +1,6 @@
 import sys
 from collections import deque
-import heapq
+
 
 input = sys.stdin.readline
 
@@ -15,7 +15,7 @@ for i in range(m):
     a1, a2, a3 = map(int, input().split())
     start.append((a3, a1, a2))
     total += a3
-heapq.heapify(start)
+start.sort()
 
 
 def find(a):
@@ -35,8 +35,8 @@ def union(a, b):
 
 
 nex = 0
-while start:
-    value, v1, v2 = heapq.heappop(start)
+for i in start:
+    value, v1, v2 = i
     f1 = find(v1)
     f2 = find(v2)
     if f1 != f2:
