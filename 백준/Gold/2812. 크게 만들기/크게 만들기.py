@@ -1,19 +1,32 @@
 import sys
+
 input = sys.stdin.readline
-from collections import deque
 
 n,k=map(int,input().split())
-e=list(map(str,input().rstrip()))
-co=0
-stack=[]
+e=list(map(int,input().rstrip()))
 
+q=[]
+ind=0
 
 for i in e:
-    while(co<k and stack and (int)(stack[-1])<(int)(i)):
-        stack.pop()
-        co+=1
-    stack.append(i)
-if k!=co:
-    stack=stack[:-(k-co)]
-
-print(''.join(stack))
+    if len(q)==0:
+        q.append(i)
+    else:
+        if ind==k:
+            q.append(i)
+        else:
+            if q[-1]<i:
+                while q:
+                    if q[-1]<i:
+                        q.pop()
+                    else:
+                        break
+                    ind+=1
+                    if ind==k:
+                        break
+                q.append(i)
+            else:
+                q.append(i)
+if ind !=k:
+    q=q[:-(k-ind)]
+print(''.join(map(str, q)))
