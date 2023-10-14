@@ -1,51 +1,54 @@
 import sys
+import math
 from collections import deque
+import heapq
+
 
 input = sys.stdin.readline
+t=int(input().rstrip())
 
-t = int(input().rstrip())
 
+def bfs(vertex,what,color,visit,graph):
 
-def bfs(vertex, check, graph, v):
-    q = deque()
-    visit = [0] * (v + 1)
-    visit[vertex] = 1
-    check[vertex] = 0
+    visit[vertex]=1
+    q=deque()
+    color[vertex]=0
     q.append(vertex)
     while q:
-        a1 = q.popleft()
-        n1 = check[a1]
-        tt = -1
-        if n1 == 0:
-            tt = 1
+        a1=q.popleft()
+        ne=-1
+        if color[a1]==0:
+            ne=1
         else:
-            tt = 0
-        for t1 in graph[a1]:
-            if visit[t1] == 0 and check[t1] == -1:
-                visit[t1] = 1
-                q.append(t1)
-                check[t1] = tt
+            ne=0
+        for i in graph[a1]:
+            if visit[i]==0:
+                visit[i]=1
+                color[i]=ne
+                q.append(i)
+
 
 
 for _ in range(t):
-    v, e = map(int, input().split())
-    graph = [[] for _ in range(v + 1)]
-    nex = []
+    v,e=map(int,input().split())
+    graph=[[]for _ in range(v+1)]
+    visit=[0]*(v+1)
+    total=[]
     for _ in range(e):
-        a1, a2 = map(int, input().split())
+        a1,a2=map(int,input().split())
         graph[a1].append(a2)
         graph[a2].append(a1)
-        nex.append((a1, a2))
-    check = [-1] * (v + 1)
-    for i in range(1, v + 1):
-        if check[i] != -1:
-            continue
-        bfs(i, check, graph, v)
-
-    ans = "YES"
-    for i in range(e):
-        a1, a2 = nex[i]
-        if check[a1] == check[a2]:
-            ans = "NO"
+        total.append((a1,a2))
+    color=[-1]*(v+1)
+    for i in range(1,v+1):
+        if visit[i]==0:
+            bfs(i,0,color,visit,graph)
+    tt=0
+    for a1,a2 in total:
+        if color[a1]==color[a2]:
+            tt=1
             break
-    print(ans)
+    if tt==0:
+        print("YES")
+    else:
+        print("NO")
