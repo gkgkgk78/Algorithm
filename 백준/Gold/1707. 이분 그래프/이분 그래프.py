@@ -1,12 +1,8 @@
 import sys
-import math
 from collections import deque
-import heapq
-
 
 input = sys.stdin.readline
 t=int(input().rstrip())
-
 
 def bfs(vertex,what,color,visit,graph):
 
