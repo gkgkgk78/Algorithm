@@ -1,4 +1,6 @@
 import sys
+import math
+from collections import deque
 import heapq
 
 input = sys.stdin.readline
@@ -13,7 +15,7 @@ def dijk(start, v, graph):
     heapq.heappush(q, (start, 0))
     while q:
         ver, val = heapq.heappop(q)
-        if distance[ver] > val:
+        if distance[ver] < val:
             continue
         for vertex, value in graph[ver]:
             nex = value + val
@@ -38,7 +40,6 @@ for _ in range(t):
     for i in range(1, v + 1):
         temp = 0
         aa = dijk(i, v, graph)
-
         for j in e:
             temp += aa[j]
         if temp < ans:
