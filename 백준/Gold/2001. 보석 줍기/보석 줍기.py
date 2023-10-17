@@ -3,10 +3,12 @@ from collections import deque
 
 input = sys.stdin.readline
 n, m, k = map(int, input().split())
-jewrly = []
+jewrly = dict()
+cc=0
 for _ in range(k):
     a = int(input().rstrip())
-    jewrly.append(a)
+    jewrly[a]=cc
+    cc+=1
 graph = [[] for _ in range(n + 1)]
 for _ in range(m):
     a1, a2, a3 = map(int, input().split())
@@ -23,8 +25,8 @@ def bfs():
     visit[1][0] = 1
     # 이제 방문을 시작 해야 하는데
     q.append((1, 0, 0))  # 시작점 주운개수 보석현황
-    if jewrly[1] == 1:
-        ne=jewrly.index(1)
+    if 1 in jewrly:
+        ne=jewrly[1]
         visit[1][1 << ne] = 1
         q.append((1, 1, 1 << ne))
 
@@ -40,7 +42,7 @@ def bfs():
                 q.append((ver, cnt, value))
             if ver in jewrly:
                 check=cnt
-                ne=jewrly.index(ver)
+                ne=jewrly[ver]
                 if (value>>(ne))&1==0:
                     check+=1
                 nex = (value) | (1 << ne)
