@@ -1,25 +1,29 @@
 import sys
+#sys.stdin = open("input.txt")
 
+A = list(input())
+B = list(input())
+A.insert(0,0)
+B.insert(0,0)
+A_len = len(A)
+B_len = len(B)
+#print(A)
+#현재 문자열을 비교하는 과정: 이전의 과정이 LCS[i-1][j], LCS[i][j-1]
+LCS = [[0] * (A_len) for _ in range(B_len)]
 
-a=[""]
-b=[""]
-a.extend(list(map(str,input().rstrip())))
+for i in range(1,len(B)):
 
-b.extend(list(map(str,input().rstrip())))
+    for j in range(1,len(A)):
 
-dp=[[0]*(len(a))for _ in range(len(b))]
+        if A[j] == B[i]:
+            LCS[i][j] = LCS[i-1][j-1]+1
+        else :
+            LCS[i][j] = max(LCS[i-1][j], LCS[i][j-1])
 
-for i in range(len(b)):
-    for j in range(len(a)):
-        if i==0 or j==0:
-            dp[i][j]=0
-        else:
-            if a[j]==b[i]:
-                dp[i][j]=dp[i-1][j-1]+1
-            else:
-                dp[i][j] =max(dp[i-1][j],dp[i][j-1])
-ans=-sys.maxsize
-for i in dp:
+# mx = -1
+# for i in LCS:
+#     if mx < max(i):
+#         mx = max(i)
+print(LCS[-1][-1])
 
-    ans=max(ans,max(i))
-print(ans)
+#print(LCS)
