@@ -1,29 +1,23 @@
-import sys, copy
-import heapq,math
-from itertools import combinations,permutations
+import sys
 from collections import deque
-sys.setrecursionlimit(10**9)
+from itertools import combinations
 
 input = sys.stdin.readline
-import functools,operator
 
-n=int(input().rstrip())
-ti=[0]*(n+1)
-pi=[0]*(n+1)
-max_re=[0]*(n+1)
+n = int(input().rstrip())
+t, p = [], []
+dp = [0 for _ in range(n + 1)]
 
+for _ in range(n):
+    ti, pi = map(int, input().split())
+    t.append(ti)
+    p.append(pi)
+
+k = 0
 for i in range(n):
-    a,b=map(int,input().split())
-    ti[i]=a
-    pi[i]=b
+    k = max(k, dp[i])
+    if i + t[i] > n:
+        continue
+    dp[i + t[i]] = max(k + p[i], dp[i + t[i]])
 
-maxval=0
-for j in range(n,-1,-1):
-    time=ti[j]+j
-    if time>n:
-        max_re[j]=maxval
-    else:
-        max_re[j]=max(maxval,pi[j]+max_re[time])
-        maxval=max_re[j]
-
-print(maxval)
+print(max(dp))
