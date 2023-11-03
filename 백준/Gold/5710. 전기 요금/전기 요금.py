@@ -43,7 +43,7 @@ while 1:
     total=watt(a1)
     #이제 전체 와트를 구하게 되었다
 
-    left=0
+    left=-1
     right=total
     tt=sys.maxsize
     while left+1<right:
