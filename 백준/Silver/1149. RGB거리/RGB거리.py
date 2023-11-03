@@ -1,20 +1,21 @@
-import sys, copy
-import heapq
-from itertools import combinations
-from collections import deque
-
+import sys
 input = sys.stdin.readline
 
-a=int(input().rstrip())
+n = int(input().rstrip())
+total = []
 
-house=[[0,0,0] for _ in range(1001)]
+for _ in range(n):
+    e = list(map(int, input().split()))
+    total.append(e)
 
+dp = [[0] * (3) for _ in range(n)]
+for i in range(3):
+    dp[0][i] = total[0][i]
 
-for i in range(1,a+1):
-    a1,a2,a3=map(int,input().split())
-    house[i][0]=min(house[i-1][1],house[i-1][2])+a1
-    house[i][1] = min(house[i - 1][0], house[i - 1][2]) + a2
-    house[i][2] = min(house[i - 1][1], house[i - 1][0]) + a3
+# 이제 최솟값을 구해보도록 하자
+for i in range(1, n):
+    dp[i][0] =total[i][0]+min(dp[i-1][1],dp[i-1][2])
+    dp[i][1] =total[i][1]+min(dp[i-1][0],dp[i-1][2])
+    dp[i][2] =total[i][2]+min(dp[i-1][0],dp[i-1][1])
 
-print(min(house[a][0],house[a][1],house[a][2]))
-
+print(min(dp[n-1]))
