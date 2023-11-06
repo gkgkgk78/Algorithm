@@ -1,147 +1,112 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
 
+import java.util.*;
+import java.io.*;
+
+//Main 클래스에서 Solution클래스 선언해주기
 public class Main {
 
-	static char graph[][];
-	static int result = 0;
-	static int fx, fy;
-	static int visit[][];
-	static int r, c;
+    static class go {
 
-	static class go {
-		int x, y;
-		int z;
+        int x, y;
 
-		public go(int x, int y) {
+        public go(int x, int y) {
 
-			this.x = x;
-			this.y = y;
-		}
+            this.x = x;
+            this.y = y;
+        }
 
-		public go(int x, int y, int z) {
+    }
 
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
+    static char[][] graph;
+    static int time;
 
-	}
+    public static List<go> bfs(List<go> now, int flag, int n, int m) {
 
-	public static void main(String[] args) throws IOException {
+        Queue<go> q = new LinkedList<>();
+        int[][] visit = new int[n][m];
 
-		
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        for (go a : now) {
+            visit[a.x][a.y] = 1;
+            q.add(a);
+        }
+        List<go> aa = new LinkedList<>();
 
-		StringTokenizer s = new StringTokenizer(in.readLine());
+        int[] dx = {-1, 0, 1, 0};
+        int[] dy = {0, 1, 0, -1};
+        while (q.size() > 0) {
+            go a = q.poll();
+            for (int i = 0; i < 4; i++) {
+                int zx, zy;
+                zx = dx[i] + a.x;
+                zy = dy[i] + a.y;
+                if (0 <= zx && zx < n && 0 <= zy && zy < m) {
+                    if ((graph[zx][zy] == '.' || graph[zx][zy] == 'D') && visit[zx][zy] == 0) {
+                        if (flag == 1 && graph[zx][zy] == 'D')
+                            continue;
+                        visit[zx][zy] = 1;
+                        if (graph[zx][zy] == 'D') {
+                            System.out.println(time);
+                            System.exit(0);
+                        }
+                        if (flag == 1)
+                            graph[zx][zy] = '*';
+                        else
+                            graph[zx][zy] = 'S';
+                        aa.add(new go(zx, zy));
 
-		r = Integer.parseInt(s.nextToken());
-		c = Integer.parseInt(s.nextToken());
-		graph = new char[r][c];
-		Queue<go> water = new LinkedList<>();
-		Queue<go> gsm = new LinkedList<>();
-		visit = new int[r][c];
-		for (int i = 0; i < r; i++) {
-			char temp[] = in.readLine().toCharArray();
-			for (int j = 0; j < c; j++) {
-				graph[i][j] = temp[j];
-				if (graph[i][j] == 'D') {
-					fx = i;
-					fy = j;
-				} else if (graph[i][j] == '*')
-
-				{
-					water.add(new go(i, j));
-				} else if (graph[i][j] == 'S')
-
-				{
-					gsm.add(new go(i, j));
-				}
-			}
-
-		}
-
-		// 우선 물부터 차오르고
-
-		// 그다음에 고슴도치 이동을 함
-		
-		while (true) {
-			result+=1;
-			bfs(water, 0);
-			bfs(gsm, 1);
-			
-//			for (int i = 0; i < r; i++) {
-//				System.out.println(Arrays.toString(graph[i]));
-//			}
-//			System.out.println();
-			if(gsm.size()==0)
-				break;
-			
-			
-		}
-		System.out.println("KAKTUS");
+                    }
+                }
+            }
+        }
+        //System.out.println(day);
 
 
-	}
+        return aa;
+    }
 
-	private static void bfs(Queue<go> q, int t) {
-		// TODO Auto-generated method stub
+    static int count = 0;
 
-		Queue<go> temp = new LinkedList<>();
-		int dx[] = { -1, 0, 1, 0 };
-		int dy[] = { 0, 1, 0, -1 };
-		
-		while (!q.isEmpty()) {
-			go a = q.poll();
-			int a1 = a.x;
-			int a2 = a.y;
-			
-			for (int i = 0; i < 4; i++) {
-				int tx = a1 + dx[i];
-				int ty = a2 + dy[i];
+    public static void main(String[] ars) throws IOException {
 
-				if (0 <= tx && tx < r && 0 <= ty && ty < c) {
-					if (visit[tx][ty] == 0) {
-						if(t==1)
-						{
-							if(graph[tx][ty]=='D')
-							{
-								System.out.println(result);
-								System.exit(0);
-							}
-						}
-						if(graph[tx][ty]=='.')
-						{
-							
-							visit[tx][ty]=1;
-							if(t==0)
-								graph[tx][ty]='*';
-							else if(t==1)
-								graph[tx][ty]='S';
-							temp.add(new go(tx,ty));
-						}
-					}
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer s = new StringTokenizer(in.readLine(), " ");
+        //난 최소일수가 궁금해
+        int n, m;
+        n = Integer.parseInt(s.nextToken());
+        m = Integer.parseInt(s.nextToken());
+        List<go> now = new LinkedList<>();
+        graph = new char[n][m];
+        time = 1;
+        List<go> water = new LinkedList<>();
+        List<go> gosm = new LinkedList<>();
+        //이렇게 해서 n,m을 구했음
+        for (int i = 0; i < n; i++) {
+            char[] t = in.readLine().toCharArray();
+            for (int j = 0; j < m; j++) {
+                graph[i][j] = (t[j]);
+                if (graph[i][j] == 'S') {
+                    gosm.add(new go(i, j));
+                } else if (graph[i][j] == '*') {
+                    water.add(new go(i, j));
+                }
+            }
+        }
 
-				}
-			}
 
-		}
-		
-		
-		for (go a : temp) {
-			q.add(new go(a.x,a.y));
-		}
-		
-		
-		
+        while (true) {
 
-	}
+            //물먼저 이동
+            //고슴도치 이동
+            water = bfs(water, 1, n, m);
+            gosm = bfs(gosm, 0, n, m);
+            time += 1;
+            if (gosm.size() == 0)
+                break;
+        }
+        System.out.println("KAKTUS");
 
+    }
 }
+
+
+
