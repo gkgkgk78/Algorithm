@@ -1,104 +1,84 @@
-import java.awt.BufferCapabilities;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
+
+class Node {
+
+
+    int vertex1;
+    int vertex2;
+    int value;
+
+    public Node(int vertex1, int vertex2, int value) {
+        this.value = value;
+        this.vertex1 = vertex1;
+        this.vertex2 = vertex2;
+    }
+}
+
 
 public class Main {
 
-	static int parents[];
-	static int n;
+    static int[] parents;
 
-	static void make() {
-		for (int i = 1; i <= n; i++) {
-			parents[i] = i;
+    public static void make(int n) {
+        for (int i = 1; i <= n; i++) {
+            parents[i] = i;
+        }
+    }
 
-		}
+    public static int find(int x) {
+        if (parents[x] == x)
+            return x;
+        parents[x] = find(parents[x]);
+        return parents[x];
+    }
 
-	}
+    public static void union(int a1, int a2) {
+        int a = find(a1);
+        int b = find(a2);
+        if (a < b)
+            parents[b] = a;
+        else
+            parents[a] = b;
+    }
 
-	static int find(int a) {
-		if (parents[a] == a)
-			return a;
-		return parents[a] = find(parents[a]);
 
-	}
+    public static void main(String[] args) throws Exception {
 
-	static int union(int a, int b) {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer s;
 
-		int a1 = find(a);
-		int a2 = find(b);
+        int n, m;
+        s = new StringTokenizer(in.readLine(), " ");
+        n = Integer.parseInt(s.nextToken());
+        parents = new int[n + 1];
+        s = new StringTokenizer(in.readLine(), " ");
+        m = Integer.parseInt(s.nextToken());
+        PriorityQueue<Node> q = new PriorityQueue<>((x, y) -> {
+            return x.value - y.value;
+        });
+        make(n);
+        for (int i = 0; i < m; i++) {
+            int a1, a2, a3;
+            s = new StringTokenizer(in.readLine(), " ");
+            a1 = Integer.parseInt(s.nextToken());
+            a2 = Integer.parseInt(s.nextToken());
+            a3 = Integer.parseInt(s.nextToken());
+            q.add(new Node(a1, a2, a3));
+        }
+        int answer = 0;
+        while (q.size() > 0) {
+            Node aa = q.poll();
+            int a1 = find(aa.vertex1);
+            int a2 = find(aa.vertex2);
+            if (a1 != a2) {
+                union(a1, a2);
+                answer += aa.value;
+            }
+        }
 
-		if (a1 == a2)
-			return 0;
+        System.out.println(answer);
+    }
 
-		if (a1 < a2)
-			parents[a2] = a1;
-		else
-			parents[a1] = a2;
-		return 1;
-
-	}
-
-	static class go implements Comparable<go> {
-		int x, y, z;
-
-		public go(int x, int y, int z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
-
-		@Override
-		public int compareTo(go o) {
-			// TODO Auto-generated method stub
-			return Integer.compare(this.z, o.z);
-		}
-
-	}
-
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		// TODO Auto-generated method stub
-
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(in.readLine());
-		parents=new int[n+1];
-		make();
-		int e = Integer.parseInt(in.readLine());
-		int a1, a2, a3;
-		StringTokenizer s;
-		
-		ArrayList<go> hi = new ArrayList<>();
-		int count = 0;
-		for (int i = 0; i < e; i++) {
-			s = new StringTokenizer(in.readLine());
-			a1 = Integer.parseInt(s.nextToken());
-			a2 = Integer.parseInt(s.nextToken());
-			a3 = Integer.parseInt(s.nextToken());
-			hi.add(new go(a1, a2, a3));
-		}
-
-		Collections.sort(hi);
-		int result = 0;
-		for (go go : hi) {
-			a1 = go.x;
-			a2 = go.y;
-			a3 = go.z;
-			if (a1 != a2) {
-				int check = union(a1, a2);
-				if (check == 1) {
-					count++;
-					result += a3;
-				}
-				if (check == n)
-					break;
-			}
-		}
-		System.out.println(result);
-
-	}
 
 }
