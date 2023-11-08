@@ -1,122 +1,89 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.Buffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
+
+class Node {
+
+
+    int vertex;
+    int value;
+
+    public Node(int vertex, int value) {
+        this.value = value;
+        this.vertex = vertex;
+    }
+}
+
 
 public class Main {
 
-	static StringBuffer buffer;
-	// node를 담은 list 가 있다(정점에 해당됨) 그 정점들을 관리하는 list가 존재
-	static List<List<Node>> list, reverselist;
-	static int[] dist, reversedist;
-	static int INF = 1000000000;
-	static int n;
+    static List<List<Node>> list;
+ 
 
-	static class Node implements Comparable<Node> {
+    public static void main(String[] args) throws Exception {
 
-		int index;
-		int distance;
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer s;
 
-		public Node(int index, int distance) {
-			this.index = index;
-			this.distance = distance;
-		}
+        int n, m, x;
+        s = new StringTokenizer(in.readLine(), " ");
+        n = Integer.parseInt(s.nextToken());
+        m = Integer.parseInt(s.nextToken());
+        x = Integer.parseInt(s.nextToken());
+        list = new LinkedList<>();
 
-		public int compareTo(Node o) {
+        for (int i = 0; i <= n; i++) {
+            list.add(new LinkedList<>());
 
-			return this.distance - o.distance;
-		}
+        }
 
-	}
+        for (int i = 0; i < m; i++) {
+            s = new StringTokenizer(in.readLine(), " ");
+            int a1, a2, a3;
+            a1 = Integer.parseInt(s.nextToken());
+            a2 = Integer.parseInt(s.nextToken());
+            a3 = Integer.parseInt(s.nextToken());
+            list.get(a1).add(new Node(a2, a3));
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		// TODO Auto-generated method stub
 
-		
+        }
+        int answer = -1;
+        //우선 역으로 해서 돌아 오는 것부터 구해 보도록 하자
+        int[] reverse = dijk(x, list, n);
+        for (int i = 1; i <= n; i++) {
+            int[] now = dijk(i, list, n);
+            answer = Math.max(answer, now[x] + reverse[i]);
+        }
+        System.out.println(answer);
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		int m, x;
-		StringTokenizer s = new StringTokenizer(in.readLine());
-		n = Integer.parseInt(s.nextToken());
-		m = Integer.parseInt(s.nextToken());
-		x = Integer.parseInt(s.nextToken());
+    }
 
-		list = new ArrayList<>();
-		reverselist = new ArrayList<>();
+    public static int[] dijk(int start, List<List<Node>> li, int n) {
+        int[] distance = new int[n + 1];
+        PriorityQueue<Node> q = new PriorityQueue<>((x, y) -> {
+            return x.value - y.value;
+        });
+        for (int i = 0; i <= n; i++) {
+            distance[i] = 9999999;
+        }
+        distance[start] = 0;
+        q.add(new Node(start, 0));
+        while (q.size() > 0) {
+            Node a1 = q.poll();
+            if (distance[a1.vertex] < a1.value)
+                continue;
+            List<Node> now = li.get(a1.vertex);
+            for (Node a : now) {
+                int temp = a.value + a1.value;
+                if (distance[a.vertex] > temp) {
+                    distance[a.vertex] = temp;
+                    q.add(new Node(a.vertex, temp));
+                }
+            }
+        }
 
-		for (int i = 0; i <= n; i++) {
-			list.add(new ArrayList<>());
-			reverselist.add(new ArrayList<>());
-		}
-		
 
-		for (int i = 1; i <= m; i++) {
-			s = new StringTokenizer(in.readLine());
-			int u = Integer.parseInt(s.nextToken());
-			int v = Integer.parseInt(s.nextToken());
-			int w = Integer.parseInt(s.nextToken());
+        return distance;
+    }
 
-			list.get(u).add(new Node(v, w));
-			reverselist.get(v).add(new Node(u, w));
-
-		}
-
-		int sum=Integer.MIN_VALUE;
-
-		for (int i = 1; i <= n; i++)
-		{
-
-			int h1[]=dijkstra(list, i);
-			int h2[]=dijkstra(list, x);
-
-			int temp=h1[x]+h2[i];
-			//System.out.println(temp);
-			if(temp>sum)
-				sum=temp;
-		}
-		//System.out.println();
-		//System.out.println(sum);
-		System.out.println(sum);
-	}
-
-	public static int[] dijkstra(List<List<Node>> list,int start) {
-
-		boolean visited[] = new boolean[n + 1];
-		int []distance = new int[n + 1];
-		Arrays.fill(distance, INF);
-
-		PriorityQueue<Node> q = new PriorityQueue<>();
-		distance[start]=0;
-		q.add(new Node(start, 0));/// index 거리
-
-		while (!q.isEmpty()) {
-			Node hi = q.poll();
-			int index = hi.index;
-			int dis = hi.distance;
-			if (distance[index] < dis)
-				continue;
-			for (Node node : list.get(index)) {// 방문한 노드에서 갈수있는데
-				// 새로 방문한 곳이 그전보다 더 멀었다면
-				if (distance[node.index] > distance[index] + node.distance) {
-					distance[node.index] = distance[index] + node.distance;
-					q.add(new Node(node.index, distance[node.index]));
-
-				}
-
-			}
-
-		}
-		
-		return distance;
-
-	}
 
 }
