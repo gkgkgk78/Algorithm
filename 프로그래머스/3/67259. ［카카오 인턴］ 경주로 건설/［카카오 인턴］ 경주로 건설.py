@@ -1,6 +1,5 @@
 
 import sys
-sys.setrecursionlimit(10**6)
 from collections import deque
 answer=sys.maxsize
 def dfs(x,y,first,rotate,board,n,m):
