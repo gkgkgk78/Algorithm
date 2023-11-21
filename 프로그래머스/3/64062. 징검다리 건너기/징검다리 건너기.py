@@ -6,6 +6,7 @@ def game(stones,k,mid):
     for i in range(len(stones)):
         if stones[i]<mid:
             temp+=1
+            
             if temp>=k:
                 return -1
         else:
