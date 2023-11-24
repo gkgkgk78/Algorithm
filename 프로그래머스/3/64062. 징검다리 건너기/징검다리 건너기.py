@@ -1,44 +1,29 @@
-import sys
-def game(stones,k,mid):
-    
-
-    temp=0
-    for i in range(len(stones)):
-        if stones[i]<mid:
-            temp+=1
-            
-            if temp>=k:
-                return -1
+def test(stones,mid,k):
+    an=0
+    for i in stones:
+        if mid>i:
+            an+=1
         else:
-            temp=0
-    
+            an=0
+        if an>=k:
+            return -1
+        
     return 1
-
-
-def finds(stones,k):
-
-    
-    left=0
-    right=max(stones)+1
-    mama=-1
-    while left+1<right:
-        mid=(left+right)//2
-        aa=game(stones,k,mid)
-        #print(left,right)
-        if aa==1:
-            left=mid
-            mama=max(mama,left)
-        else:
-            right=mid
-    return mama
-            
-    
-    
 
 def solution(stones, k):
     answer = 0
-    
-    answer=finds(stones,k)
+    left=-1
+    #right=max(stones)+1
+    right=200000000
+    while left+1<right:
+        mid=(left+right)//2
+        tt=test(stones,mid,k)
+        if tt==1:
+            left=mid
+        else:
+            right=mid
+        #print(tt,left,right)
+    answer=left
     
     
     return answer
