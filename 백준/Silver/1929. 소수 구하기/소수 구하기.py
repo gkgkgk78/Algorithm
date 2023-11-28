@@ -1,15 +1,20 @@
 import sys
 input = sys.stdin.readline
-n,m=map(int,input().split())
-dp=[1]*(m+1)
-for i in range(2,m+1):
-    t=i
-    while 1:
-        if t>m:
-            break
-        dp[t]+=1
-        t+=i
+a,b=map(int,input().split())
+def get_prime(x):
+	la = []
+	ee = (int)(x + 1)
+	is_prime = [1] * (ee)
+	for i in range(2, ee):
+		start = i + i
+		if is_prime[i] == 1:
+			la.append(i)
+			while start < ee:
+				is_prime[start] = 0
+				start += i
+	return la
+aa=get_prime(b)
 
-for i in range(n,m+1):
-    if dp[i]==2:
-        print(i)
+for i in aa:
+	if i>=a:
+		print(i)
