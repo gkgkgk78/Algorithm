@@ -60,33 +60,36 @@ def bfs(index,a1,a2,a3):
         #이제 넣어 줘야 한다
         if len(temp1)>0:
             last=temp1[-1]
-            s1=make(temp1[:-1],temp2+last,temp3)
+            before=temp1[:-1]
+            s1=make(before,temp2+last,temp3)
             if s1 not in visit:
                 visit[s1]=1
-                q.append((now+1,temp1[:-1],temp2+last,temp3))
-            s1 = make(temp1[:-1], temp2, temp3+last)
+                q.append((now+1,before,temp2+last,temp3))
+            s1 = make(before, temp2, temp3+last)
             if s1 not in visit:
                 visit[s1] = 1
-                q.append((now + 1, temp1[:-1], temp2, temp3+last))
+                q.append((now + 1, before, temp2, temp3+last))
         if len(temp2)>0:
             last=temp2[-1]
-            s1=make(temp1+last,temp2[:-1],temp3)
+            before=temp2[:-1]
+            s1=make(temp1+last,before,temp3)
             if s1 not in visit:
                 visit[s1]=1
-                q.append((now+1,temp1+last,temp2[:-1],temp3))
-            s1 = make(temp1,temp2[:-1],temp3+last)
+                q.append((now+1,temp1+last,before,temp3))
+            s1 = make(temp1,before,temp3+last)
             if s1 not in visit:
                 visit[s1] = 1
-                q.append((now + 1, temp1,temp2[:-1],temp3+last))
+                q.append((now + 1, temp1,before,temp3+last))
         if len(temp3)>0:
             last=temp3[-1]
-            s1=make(temp1+last,temp2,temp3[:-1])
+            before=temp3[:-1]
+            s1=make(temp1+last,temp2,before)
             if s1 not in visit:
                 visit[s1]=1
-                q.append((now+1,temp1+last,temp2,temp3[:-1]))
-            s1 = make(temp1,temp2+last,temp3[:-1])
+                q.append((now+1,temp1+last,temp2,before))
+            s1 = make(temp1,temp2+last,before)
             if s1 not in visit:
                 visit[s1] = 1
-                q.append((now + 1, temp1,temp2+last,temp3[:-1]))
+                q.append((now + 1, temp1,temp2+last,before))
 
 print(bfs(0,first,second,third))
