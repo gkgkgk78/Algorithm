@@ -1,5 +1,5 @@
 import sys
-#1시간 딱 걸림
+from collections import deque
 
 input = sys.stdin.readline
 n = int(input().rstrip())
