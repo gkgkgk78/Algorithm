@@ -1,216 +1,135 @@
-import java.awt.BufferCapabilities;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-	static int graph[][];
-	static shark sha;
-	static ArrayList<fish> fis;
-	static int n;
-	static int result = 0;
 
-	static class shark {
-		int x, y, size, count;
+    static int n, m;
+    static int shark_x, shark_y, shark_size;
+    static int graph[][];
+    static int time = 0;
+    static int shark_temp = 0;
 
-		public shark(int x, int y, int size, int count) {
+    public static class fish {
+        int x, y, dir;
 
-			this.x = x;
-			this.y = y;
-			this.size = size;
-			this.count = count;
-		}
+        public fish(int x, int y, int dir) {
+            this.x = x;
+            this.y = y;
+            this.dir = dir;
+        }
+    }
 
-	}
+    public static class go {
+        int x, y;
 
-	static class fish {
-		int x, y, size;
-		int time;
+        public go(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 
-		public fish(int x, int y, int time, int size) {
 
-			this.x = x;
-			this.y = y;
-			this.size = size;
-			this.time = time;
-		}
+    public static int[][] move() {
 
-		public fish(int x, int y, int size) {
+        //이제 상어의 입장에서 물고기에 도달할수 있는지 확인해보자
+        int visit[][] = new int[n][n];
+        visit[shark_x][shark_y] = 1;
+        Queue<go> q = new LinkedList<>();
+        int dx[] = {-1, 0, 1, 0};
+        int dy[] = {0, 1, 0, -1};
+        q.add(new go(shark_x, shark_y));
+        while (!q.isEmpty()) {
+            go a = q.poll();
 
-			this.x = x;
-			this.y = y;
-			this.size = size;
-		}
-	}
+            for (int i = 0; i < 4; i++) {
+                int zx = dx[i] + a.x;
+                int zy = dy[i] + a.y;
+                if (0 <= zx && zx < n && 0 <= zy && zy < n) {
+                    if (visit[zx][zy] == 0 && graph[zx][zy] <= shark_size) {
+                        visit[zx][zy] = visit[a.x][a.y] + 1;
+                        q.add(new go(zx, zy));
+                    }
+                }
+            }
+        }
+        return visit;
+    }
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		// TODO Auto-generated method stub
-		
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-		n = Integer.parseInt(in.readLine());
-		fis = new ArrayList<>();
-		graph = new int[n][n];
-		for (int i = 0; i < n; i++) {
-			StringTokenizer s = new StringTokenizer(in.readLine());
-			for (int j = 0; j < n; j++) {
-				graph[i][j] = Integer.parseInt(s.nextToken());
-				if (graph[i][j] == 9) {
+    public static int find() {
+        //이제 물고기 찾아야 함
+        //자신의 크기보다 작거나 같은 물고기 리스트들 확인하기
+        List<fish> fishes = new LinkedList();
+        int visit[][] = move();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == shark_x && j == shark_y)
+                    continue;
+                //찾아보자
+                if (graph[i][j] != 0 && graph[i][j] < shark_size && visit[i][j] != 0) {
+                    fishes.add(new fish(i, j, visit[i][j]));
+                }
+            }
+        }
+        //이제 정렬 하자
+        fishes.sort((x, y) -> {
+            if (x.dir != y.dir)
+                return x.dir - y.dir;
+            else if (x.x != y.x)
+                return x.x - y.x;
+            else
+                return x.y - y.y;
+        });
+        if (fishes.size() == 0)
+            return 0;
+        //이제 찾은거 하나로 해서 이동하면 될듯하다
+        fish first = fishes.get(0);
+        time += first.dir - 1;
+        shark_x = first.x;
+        shark_y = first.y;
+        shark_temp += 1;
+        if (shark_temp == shark_size) {
+            shark_temp = 0;
+            shark_size += 1;
+        }
+        graph[first.x][first.y] = 0;
+        return 1;
+    }
 
-					sha = new shark(i, j, 2, 0);
-					graph[i][j] = 0;
-				} else if (graph[i][j] >= 1 && graph[i][j] <= 6) {
-					fis.add(new fish(i, j, graph[i][j]));
-				}
-			}
 
-		}
+    public static void main(String[] args) throws IOException {
 
-		move();
 
-	}
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer s = new StringTokenizer(br.readLine(), " ");
+        n = Integer.parseInt(s.nextToken());
+        //n*m공간에 물고기 m마리와 아기상어 1마리가 존재 한다
+        //한 칸에는 물고기가 최대 1마리 존재 한다
+        shark_size = 2;
+        graph = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            s = new StringTokenizer(br.readLine(), " ");
+            for (int j = 0; j < n; j++) {
+                graph[i][j] = Integer.parseInt(s.nextToken());
+                if (graph[i][j] == 9) {
+                    shark_x = i;
+                    shark_y = j;
+                    graph[i][j] = 0;
+                }
+            }
+        }
+        while (true) {
+            int check = find();
+            if (check == 0)
+                break;
+        }
+        System.out.println(time);
 
-	private static void move() {
-		// TODO Auto-generated method stub
 
-		while (true) {
-
-			// 이동시 크기가 같거나 작은 물고기는 이동하기만 하면되
-			// 먹을수 있는것은 나보다 작은 물고기임
-			ArrayList<fish> temp = new ArrayList<>();
-
-			int x = -1;
-			int y = -1;
-			int size = Integer.MAX_VALUE;
-
-			int sh_x = sha.x;
-			int sh_y = sha.y;
-			int leng=-1;
-			// 우선먹을수 있는 물고기들부터 파악을하자
-			for (fish f : fis) {
-				// int leng=Math.abs(f.x-sh_x)+Math.abs(f.y-sh_y);\
-				if (graph[f.x][f.y] < sha.size)
-					leng = bfs(f.x, f.y,sha.size);
-				else
-					leng=-1;
-				if (leng > 0) {
-					if (leng < size&&leng!=-1) {
-						temp = new ArrayList<>();
-						x = f.x;
-						y = f.y;
-						size = leng;
-						temp.add(new fish(f.x, f.y, f.size));
-					} else if (leng == size) {
-						// 가까운 물고기 많다면 우선 가장 위에 있는 물고기
-						// 그리고 가장 왼쪽에 있는 물고기를 선택
-						if (f.x < x) {
-							x = f.x;
-							y = f.y;
-							temp = new ArrayList<>();
-							temp.add(new fish(f.x, f.y, f.size));
-						} else if (f.x == x) {
-							if (f.y < y) {
-								y = f.y;
-								temp = new ArrayList<>();
-								temp.add(new fish(f.x, f.y, f.size));
-							}
-						}
-					}
-				}
-			}
-			if (temp.size() == 0) {
-				System.out.println(result);
-				return;
-			}
-			graph[x][y]=0;
-			sha.count++;
-			//System.out.println(size);
-			result+=size;
-			sha.x=x;
-			sha.y=y;
-			if(sha.count==sha.size)
-			{
-				sha.size++;
-				sha.count=0;
-			}
-
-			// 잡은 물고기를 삭제하도록 하자
-
-			for (int i = fis.size() - 1; i >= 0; i--) {
-				fish hi = fis.get(i);
-				if (hi.x == x && hi.y == y) {
-					fis.remove(i);
-					break;
-
-				}
-
-			}
-
-//			for (int i = 0; i < n; i++) {
-//
-//				System.out.println(Arrays.toString(graph[i]));
-//
-//			}
-//			System.out.println();
-
-		}
-	}
-
-	private static int bfs(int x, int y, int size) {
-
-		int dx[] = { -1, 0, 1, 0 };
-		int dy[] = { 0, 1, 0, -1 };
-		Queue<fish> q = new LinkedList<>();
-
-		q.add(new fish(sha.x, sha.y, 0, 0));
-		int visit[][] = new int[n][n];
-		visit[sha.x][sha.y] = 1;
-		int ss = sha.size;
-		while (!q.isEmpty()) {
-			fish a = q.poll();
-			int tx = a.x;
-			int ty = a.y;
-			int time = a.time;
-			for (int i = 0; i < 4; i++) {
-				int zx = tx + dx[i];
-				int zy = ty + dy[i];
-				if (0 <= zx && zx < n && 0 <= zy && zy < n) {
-					if (visit[zx][zy] == 0 && graph[zx][zy] <= size) {
-						q.add(new fish(zx, zy, time + 1, 0));
-						visit[zx][zy] = 1;
-						if (zx == x && zy == y) {
-							return time + 1;
-//							int add = graph[zx][zy];
-//							sha.count++;
-//							if (sha.size == sha.count) {
-//								sha.size++;
-//								sha.count = 0;
-//							}
-//							sha.x=x;
-//							sha.y=y;
-//							
-//							result += (time+1 );
-//
-//							System.out.println(zx+" "+zy+" "+(time+1)+" "+sha.size+" "+sha.count);
-//							graph[zx][zy] = 0;
-//							
-						}
-					}
-
-				}
-
-			}
-
-		}
-		return -1;
-
-	}
-
+    }
 }
