@@ -35,7 +35,7 @@ def dijk(start, last, tt):
                     distance[go] = va + val
                     if go != last:
                         heapq.heappush(q, (va + val, go))
-    if distance[last]<=value:
+    if distance[last]<=value and distance[last]!=-1:
         return 1
     else:
         return 0
