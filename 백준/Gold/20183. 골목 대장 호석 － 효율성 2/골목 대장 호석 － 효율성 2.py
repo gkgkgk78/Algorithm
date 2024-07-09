@@ -5,11 +5,11 @@ input = sys.stdin.readline
 
 n, m, start, last, value = map(int, input().split())
 graph = [[] for _ in range(n + 1)]
-
+cc=[]
 right=-1
 for _ in range(m):
     a1, a2, a3 = map(int, input().split())
-    right=max(right,a3)
+    heapq.heappush(cc,-a3)
     graph[a1].append((a2, a3))
     graph[a2].append((a1, a3))
 
@@ -35,18 +35,19 @@ def dijk(start, last, tt):
                     distance[go] = va + val
                     if go != last:
                         heapq.heappush(q, (va + val, go))
-
-    return distance[last]
-
+    if distance[last]<=value:
+        return 1
+    else:
+        return 0
 
 left = 0
-right+=1
+right=(-heapq.heappop(cc))+1
 ans = sys.maxsize
 while left + 1 < right:
 
     mid = (left + right) // 2
     aa = dijk(start, last, mid)
-    if aa <= value:
+    if aa ==1:
         right = mid
         ans = min(ans, mid)
     else:
