@@ -2,33 +2,26 @@ import sys
 from collections import deque
 
 input = sys.stdin.readline
-visit = [sys.maxsize] * (100001)
 
-n, k = map(int, input().split())
+visit = [-1] * (100001)
+q = deque()
+n, m = map(int, input().split())
 
-
-def bfs():
-    q = deque()
-    visit[n] = 0
-    q.append((n, 0))
-
-    while q:
-        vertex, time = q.popleft()
-        if vertex == k:
-            print(time)
-            return
-        dx = [-1, 1]
-        for i in range(2):
-            z = vertex + dx[i]
-            if 0 <= z <= 100000:
-                if time + 1 < visit[z]:
-                    visit[z] = time + 1
-                    q.append((z, time + 1))
-        z = vertex * 2
-        if 0 <= z <= 100000:
-            if time < visit[z]:
-                visit[z] = time
-                q.appendleft((z, time))
-
-
-bfs()
+time = 0
+q.append((n))
+visit[n] = 0
+while q:
+    vertex = q.popleft()
+    if vertex == m:
+        time = visit[vertex]
+        break
+    if vertex * 2 <= 100000 and visit[vertex * 2] == -1:
+        q.appendleft((vertex * 2))
+        visit[vertex * 2] = visit[vertex]
+    if 0 <= vertex - 1 <= 100000 and visit[vertex - 1] == -1:
+        q.append((vertex - 1))
+        visit[vertex - 1] = visit[vertex] + 1
+    if 0 <= vertex + 1 <= 100000 and visit[vertex + 1] == -1:
+        q.append((vertex + 1))
+        visit[vertex + 1] = visit[vertex] + 1
+print(time)
