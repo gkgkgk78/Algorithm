@@ -39,11 +39,11 @@ def bfs():
                     if graph[zx][zy] == 0:
                         if visit[zx][zy] == -1:
                             visit[zx][zy] = visit[x][y]
-                            q.append((zx, zy))
+                            q.appendleft((zx, zy))
                         else:
                             if visit[zx][zy] > visit[x][y]:
                                 visit[zx][zy] = visit[x][y]
-                                q.append((zx, zy))
+                                q.appendleft((zx, zy))
                     else:
                         if visit[zx][zy] == -1:
                             visit[zx][zy] = visit[x][y] + 1
