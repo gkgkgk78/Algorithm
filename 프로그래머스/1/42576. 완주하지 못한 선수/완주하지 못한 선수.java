@@ -3,27 +3,30 @@ class Solution {
  
     public String solution(String[] participant, String[] completion) {
         String answer = "";
-        HashMap<String,Integer>m=new HashMap<>();
+        HashMap<String,Integer>left=new HashMap<>();
+        HashMap<String,Integer>right=new HashMap<>();
+
+        for(String s:completion){
+            if(right.containsKey(s))
+            {
+                right.put(s,right.get(s)+1);
+            }
+            else
+            {
+                right.put(s,1);
+            }
+        }
         
-        for(String s: participant)
-        {
-            if(!m.containsKey(s))
-                m.put(s,1);
-            else
-                m.put(s,m.get(s)+1);
-        }
-        for(String s: completion)
-        {
-            if(!m.containsKey(s))
+        for(String s:participant){
+            if(!right.containsKey(s))
+                return s;
+            int now=right.get(s);
+            if(now==0)
                 return s;
             else
-                m.put(s,m.get(s)-1);
+                right.put(s,now-1);
         }
-          for(String s: participant)
-        {
-            if(m.get(s)==1)
-                return s;
-        }
+        
         
         return answer;
     }
