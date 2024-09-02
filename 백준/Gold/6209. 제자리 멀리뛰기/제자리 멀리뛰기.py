@@ -1,34 +1,36 @@
 import sys
 input = sys.stdin.readline
-d,n,m=map(int,input().split())
-total=[]
+
+d, n, m = map(int, input().split())
+temp = []
 for _ in range(n):
-    total.append(int(input().rstrip()))
-total.append(d)
-total.sort()
+    e = (int)(input().rstrip())
+    temp.append(e)
+temp.sort()
 
-left=0
-right=d+1
-now=0
+left = 0
+right = d + 1
 
-def check(mid):
-    now=0
-    cnt=0
-    for l in range(n+1):
-        if total[l]-now<mid:
-            if l!=n:
-                cnt+=1
+
+def bi(mid):
+    before = 0
+    count = 0
+    for i in range(len(temp)):
+        now = temp[i] - before
+        if now >= mid:
+            before = temp[i]
         else:
-            now=total[l]
-    return cnt
+            count += 1
+    return count
 
 
-while left+1<right:
-    mid=(left+right)//2
-    t=check(mid)
-    if t>m:
-        right=mid
+answer = -1
+while left + 1 < right:
+    mid = (left + right) // 2
+    check = bi(mid)
+    if check <= m:
+        left = mid
+        answer = mid
     else:
-        left=mid
-
-print(left)
+        right = mid
+print(answer)
