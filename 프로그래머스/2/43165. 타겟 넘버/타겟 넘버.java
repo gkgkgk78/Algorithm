@@ -1,28 +1,40 @@
 import java.util.*;
+
 class Solution {
     static int answer=0;
-    
-    public void dfs(int index,int sumz,int target,int[]arr){
-        
-        if(index==arr.length){
-            if(sumz==target)
-                answer+=1;
-            return ;
-        }
-        dfs(index+1,sumz+arr[index],target,arr);
-        dfs(index+1,sumz-arr[index],target,arr);
+    //n개의 음이 아닌 정수들이 존재한다
+    //적절히 더하거나 빼서 타겟 넘버를 만들려고 한다
+    public void dfs(int[]numbers,String []go,int target,int last,int index){
+        if(index==last)
+        {
+            int temp=0;
+            for(int i=0;i<numbers.length;i++){
+                if(go[i]=="-")
+                {
+                    temp-=numbers[i];
+                }
+                else
+                    temp+=numbers[i];
+            }
 
-        return ;
-    };
-    
+            if(temp==target){
+                answer+=1;
+        }
+
+            return;
+        }
+        go[index]="-";
+        dfs(numbers,go,target,last,index+1);
+        go[index]="+";
+        dfs(numbers,go,target,last,index+1);
+
+        
+    }
     
     
     public int solution(int[] numbers, int target) {
-        
-        dfs(0,0,target,numbers);
-        
-        
-        
+        String[] go=new String[numbers.length];  
+        dfs(numbers,go,target,numbers.length,0);
         
         return answer;
     }
