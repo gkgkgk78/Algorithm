@@ -1,35 +1,23 @@
 import sys
-input = sys.stdin.readline
+import heapq
 
-
-i=int(input().rstrip())
-de=list(map(int,input().split()))
-
-de.sort()
+n = int(input().rstrip())
+e = list(map(int, input().split()))
+e.sort()
+answer=sys.maxsize
 left=0
-right=i-1
-uo=sys.maxsize
-
-tl=left
-tr=right
-
-ch=0
+right=n-1
+last=[-1,-1]
 while left<right:
-    mid=de[left]+de[right]
-    check=uo-mid
-    if (abs(mid) <= uo):
-        uo = abs(mid)
-        tl = left
-        tr = right
-    if (mid == 0):
-        print(str(de[left]) + " " + str(de[right]))
-        ch=1
-        break
+    mid=e[left]+e[right]
+    if abs(mid)<abs(answer):
+        answer=mid
+        last[0]=e[left]
+        last[1]=e[right]
     if mid<0:
         left+=1
-    else:
+    elif mid>0:
         right-=1
-    
-
-if(ch==0):
-    print(str(de[tl]) + " " + str(de[tr]))
+    else:
+        break
+print(*last)
