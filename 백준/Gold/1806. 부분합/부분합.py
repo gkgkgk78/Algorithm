@@ -1,34 +1,35 @@
 import sys
 
-input = sys.stdin.readline
-
 n, s = map(int, input().split())
 e = list(map(int, input().split()))
-
+answer = sys.maxsize
 left = 0
 right = 0
-now = e[0]
-
-ans = sys.maxsize
+now = e[left]
 if now >= s:
-    ans = min(ans, right - left + 1)
+    answer = min(answer, right - left + 1)
 
 while right < n:
-    right += 1
-    if right == n:
+    if right + 1 == n:
         break
+    right+=1
     now+=e[right]
     if now>=s:
-        while 1:
-            if now >= s:
-                ans = min(ans, right - left + 1)
-            if left == right:
+        #이제 빼야함
+        if now >= s:
+            answer = min(answer, right - left + 1)
+        while left<right:
+            if now>=s:
+                answer = min(answer, right - left + 1)
+                now-=e[left]
+                left+=1
+            else:
                 break
-            now-=e[left]
-            left+=1
-            if now<s:
+            if left==right:
                 break
-if ans==sys.maxsize:
+    if now >= s:
+        answer = min(answer, right - left + 1)
+if answer==sys.maxsize:
     print(0)
 else:
-    print(ans)
+    print(answer)
