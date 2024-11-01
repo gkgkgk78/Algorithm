@@ -1,89 +1,84 @@
-import java.util.*;
+import javax.print.ServiceUIFactory;
 import java.io.*;
-
-class Node {
-
-
-    int vertex;
-    int value;
-
-    public Node(int vertex, int value) {
-        this.value = value;
-        this.vertex = vertex;
-    }
-}
-
+import java.util.*;
 
 public class Main {
 
-    static List<List<Node>> list;
- 
+    //n명의 학생이 x마을에 모여서 파티를 벌이기로 했다
 
-    public static void main(String[] args) throws Exception {
+    public static class go {
+        int end, value;
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer s;
+        public go(int end, int value) {
+            this.end = end;
+            this.value = value;
+        }
+    }
+
+    public static int dijk(int n, ArrayList<go> list[], int start, int last) {
+
+        int visit[] = new int[n];
+        for (int i = 0; i < n; i++) {
+            visit[i] = Integer.MAX_VALUE;
+        }
+        visit[start] = 0;
+        PriorityQueue<go> q = new PriorityQueue<>((x, y) -> {
+            return x.value - y.value;
+        });
+        q.add(new go(start, 0));
+
+        while (!q.isEmpty()) {
+            go a = q.poll();
+            if (a.value > visit[a.end])
+                continue;
+            for (go vertex : list[a.end]) {
+                int now = vertex.value + a.value;
+                if (visit[vertex.end] > now) {
+                    visit[vertex.end] = now;
+                    q.add(new go(vertex.end, now));
+                }
+            }
+        }
+        return visit[last];
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer s = new StringTokenizer(br.readLine(), " ");
+        //이 마을 사이에는 총 m개의 단방향 도로들이 있고
 
         int n, m, x;
-        s = new StringTokenizer(in.readLine(), " ");
         n = Integer.parseInt(s.nextToken());
         m = Integer.parseInt(s.nextToken());
         x = Integer.parseInt(s.nextToken());
-        list = new LinkedList<>();
+        x -= 1;
 
-        for (int i = 0; i <= n; i++) {
-            list.add(new LinkedList<>());
+        ArrayList<go> list[] = new ArrayList[n];
 
+        for (int i = 0; i < n; i++) {
+            list[i] = new ArrayList<>();
         }
-
         for (int i = 0; i < m; i++) {
-            s = new StringTokenizer(in.readLine(), " ");
+            s = new StringTokenizer(br.readLine(), " ");
             int a1, a2, a3;
             a1 = Integer.parseInt(s.nextToken());
             a2 = Integer.parseInt(s.nextToken());
             a3 = Integer.parseInt(s.nextToken());
-            list.get(a1).add(new Node(a2, a3));
-
-
+            a1 -= 1;
+            a2 -= 1;
+            list[a1].add(new go(a2, a3));
+//            list[a2].add(new go(a1, a3));
         }
+        int visit[] = new int[n];
         int answer = -1;
-        //우선 역으로 해서 돌아 오는 것부터 구해 보도록 하자
-        int[] reverse = dijk(x, list, n);
-        for (int i = 1; i <= n; i++) {
-            int[] now = dijk(i, list, n);
-            answer = Math.max(answer, now[x] + reverse[i]);
+        for (int i = 0; i < n; i++) {
+            int go = dijk(n, list, i, x);
+            int back = dijk(n, list, x, i);
+            visit[i] = go + back;
+            answer = Math.max(answer, visit[i]);
         }
         System.out.println(answer);
 
     }
-
-    public static int[] dijk(int start, List<List<Node>> li, int n) {
-        int[] distance = new int[n + 1];
-        PriorityQueue<Node> q = new PriorityQueue<>((x, y) -> {
-            return x.value - y.value;
-        });
-        for (int i = 0; i <= n; i++) {
-            distance[i] = 9999999;
-        }
-        distance[start] = 0;
-        q.add(new Node(start, 0));
-        while (q.size() > 0) {
-            Node a1 = q.poll();
-            if (distance[a1.vertex] < a1.value)
-                continue;
-            List<Node> now = li.get(a1.vertex);
-            for (Node a : now) {
-                int temp = a.value + a1.value;
-                if (distance[a.vertex] > temp) {
-                    distance[a.vertex] = temp;
-                    q.add(new Node(a.vertex, temp));
-                }
-            }
-        }
-
-
-        return distance;
-    }
-
 
 }
