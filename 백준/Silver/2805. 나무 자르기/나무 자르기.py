@@ -1,26 +1,29 @@
 import sys
+
 input = sys.stdin.readline
 
-N, M = map(int,input().split()) # 나무 수, 필요한 나무 길이
-trees = list(map(int, input().split()))
+n, m = map(int, input().split())
+e = list(map(int, input().split()))
 
-start, end = 0, max(trees) # 시작 점, 끝점
-tt=0
-# 이분 탐색
-while start <= end:
-    mid = (start+end)//2
-    tree = 0 # 잘린 나무 합
-    for i in trees:
-        if i > mid: # mid보다 큰 나무 높이는 잘림
-            to=i-mid
-            tree=tree+to
+left = -1
+right = max(e) + 1
 
-    if tree >=M: # 원하는 나무 높이보다 더 많이 잘렸으면
-        start = mid + 1
-    else: # 원하는 나무 높이보다 덜 잘렸으면
-        end = mid - 1
-    if(tree==M):
-        if mid>tt:
-            tt=mid
+def count(mid):
+    check=0
+    for i in e:
+        temp=i-mid
+        if temp>0:
+            check+=temp
+    if check>=m:
+        return 1
+    else:
+        return 0
 
-print(start-1)
+while left+1<right:
+    mid=(left+right)//2
+    temp=count(mid)
+    if temp==1:
+        left=mid
+    else:
+        right=mid
+print(left)
