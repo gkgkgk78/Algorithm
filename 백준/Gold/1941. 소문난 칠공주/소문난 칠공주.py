@@ -1,6 +1,6 @@
 import sys
-from itertools import combinations
 from collections import deque
+
 input = sys.stdin.readline
 
 graph = []
@@ -8,50 +8,60 @@ for _ in range(5):
     e = list(map(str, input().rstrip()))
     graph.append(e)
 
+# 소문난 칠공주를 결성할 수 있는 모든 경우의 수를 출력 하자
+
 total = []
 for i in range(5):
     for j in range(5):
         total.append((i, j))
+isSelected = [0] * (7)
+
+answer = 0
 
 
-
-nex=list(combinations(total,7))
-
-ans=0
-
-def bfs(li):
-    global ans
-
-    visit=[[-1]*5 for _ in range(5)]
-
-    for i in li:
-        a1,a2=i
-        visit[a1][a2]=1
-    dx=[-1,0,1,0]
-    dy=[0,1,0,-1]
-    q=deque()
-    q.append((li[0][0],li[0][1]))
-    visit[li[0][0]][li[0][1]] = 0
-    cu=1
+def game():
+    global answer
+    q = deque()
+    visit = [[0] * (5) for _ in range(5)]
+    sx, sy = total[isSelected[0]]
+    for i in isSelected:
+        x, y = total[i]
+        visit[x][y]=1
+    q.append((sx,sy))
+    dx = [-1, 0, 1, 0]
+    dy = [0, 1, 0, -1]
+    co=1
+    visit[sx][sy]=2
     while q:
-        a1,a2=q.popleft()
+        x, y = q.popleft()
         for i in range(4):
-            zx=dx[i]+a1
-            zy=dy[i]+a2
-            if 0<=zx<5 and 0<=zy<5 and visit[zx][zy]==1:
-                q.append((zx,zy))
-                visit[zx][zy]=0
-                cu += 1
+            zx = x + dx[i]
+            zy = y + dy[i]
+            if 0 <= zx < 5 and 0 <= zy < 5 and visit[zx][zy] == 1:
+                visit[zx][zy] = 2
+                q.append((zx, zy))
+                co+=1
 
-    if cu==7:
-        ans+=1
 
-for i in nex:
-    check=0
-    for a1,a2 in i:
-        if graph[a1][a2]=="S":
-            check+=1
-    if check>=4:
-        bfs(i)
+    if co == 7:
+        answer += 1
 
-print(ans)
+
+def comb(index, count):
+    if count == 7:
+        # print(isSelected)
+        co=0
+        for i in isSelected:
+            x, y = total[i]
+            if graph[x][y] == "S":
+                co += 1
+        if co>=4:
+            game()
+        return
+    for i in range(index, 25):
+        isSelected[count] = i
+        comb(i + 1, count + 1)
+
+
+comb(0, 0)
+print(answer)
