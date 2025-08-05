@@ -1,32 +1,27 @@
 import java.util.*;
-
 class Solution {
-    public int solution(int[] scoville, int K) {
+    
+    public int solution(int[] scoville, int k) {
         int answer = 0;
+        //모든 음식의 스코빌 지수를 k이상으로 만들고자 한다.
+        PriorityQueue<Integer>q=new PriorityQueue<>((a,b)->a-b);
         
-        PriorityQueue<Integer> q = new PriorityQueue<>();
-        
-        for(int i=0;i<scoville.length;i++)
-        {
+        for(int i=0;i<scoville.length;i++){
             q.add(scoville[i]);
         }
-        int count=0;
-        //모든 음식의 스코빌 지수가 k이상이 될때 까지 반복 한다
-        while(true)
-        {
-            if(q.size()==0)
-                break;
+        while(!q.isEmpty()){
             int a1=q.poll();
-            if(a1>=K)
-                return count;
-            if(q.size()==0)
-                break;
+            // System.out.println(a1);
+            if(a1>=k){
+                return answer;
+            }
+            if(q.isEmpty())
+                return -1;
             int a2=q.poll();
-            q.add(a1+a2*2);           
-            count+=1;
+            // System.out.println(a2);
+            q.add(a1+a2*2);
+            answer+=1;
         }
-    
-        
         return -1;
     }
 }
