@@ -3,19 +3,25 @@ import java.util.*;
 public class Solution {
     public int[] solution(int []arr) {
         int[] answer = {};
-        List<Integer>list=new LinkedList<>();
-        int check=arr[0];
-        list.add(arr[0]);
-        for(int i=1;i<arr.length;i++){
-            if(arr[i]==check)
+        List<Integer>list=new ArrayList<>();
+        int last=-1;
+        for(int i : arr){
+            if (last==-1){
+                last=i;
+                list.add(i);
                 continue;
-            else
-            {
-                check=arr[i];
-                list.add(arr[i]);
             }
+            if(i==last)
+                continue;
+            last=i;
+            list.add(i);
         }
-        answer=list.stream().mapToInt(i->i).toArray();
+        answer=new int[list.size()];
+        for(int i=0;i<list.size();i++){
+            answer[i]=list.get(i);
+        }
+       
+
         return answer;
     }
 }
