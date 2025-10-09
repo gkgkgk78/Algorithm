@@ -1,26 +1,22 @@
-import java.util.*;
+import java.util.*; 
 class Solution {
     boolean solution(String s) {
-        boolean answer = false;
-        Deque<Character>deque=new ArrayDeque<>();
+        boolean answer = true;
+        
+        Deque<Integer>q=new ArrayDeque<>();
         for(int i=0;i<s.length();i++){
-            char ch=s.charAt(i);
-            if(ch=='(')
-            {
-                deque.add(ch);
+            if(s.charAt(i)=='('){
+                q.add(1);
             }
-            else
-            {
-                if(deque.size()==0)
+            else{
+                if(q.isEmpty())
                     return false;
-                else
-                    deque.removeLast();
+                q.pollFirst();
             }
         }
-        if(deque.size()==0)
-            return true;
-        
-        
+        if(!q.isEmpty())
+            return false;
+
         return answer;
     }
 }
