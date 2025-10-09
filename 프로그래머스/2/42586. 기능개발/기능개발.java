@@ -2,44 +2,37 @@ import java.util.*;
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
         int[] answer = {};
-        Deque<Integer> queue=new ArrayDeque<>();
+        //각 배포마다 몇개의 기능이 배포되는지?
+        List<Integer>an=new ArrayList<>();
+        ArrayDeque<Integer>temp=new ArrayDeque<>();
+        
         for(int i=0;i<progresses.length;i++){
-            int div=(100-progresses[i])/speeds[i];
-            int mod=(100-progresses[i])%speeds[i];
-            if(mod!=0)
-                div+=1;
-            queue.add(div);
+            double check=(100-(double)progresses[i])/(double)speeds[i];
+            temp.add((int)Math.ceil(check));
         }
-        List<Integer>list=new LinkedList<>();
-        int first=-1;
-        int size=0;
-        while(!queue.isEmpty())
-        {
-            int s=queue.removeFirst();
-            if(first==-1)
-            {
-                size=1;
-                first=s;
-            }
-            else
-            {
-                if(s<=first)
-                {
-                    size+=1;
+        int day=0;
+        while(!temp.isEmpty()){
+            int check=0;
+            int first=temp.pollFirst();
+            check+=1;
+            day=first;
+            while(!temp.isEmpty()){
+                int second=temp.pollFirst();
+                if(second<=day){
+                    check+=1;
                 }
-                else
-                {
-                    list.add(size);
-                    first=s;
-                    size=1;
+                else{
+                    temp.addFirst(second);
+                    break;
                 }
             }
+            an.add(check);
         }
-        list.add(size);
-
-        answer=list.stream().mapToInt(i->i).toArray();
-        
-        
+        answer=new int[an.size()];
+        for(int i=0;i<an.size();i++){
+            answer[i]=an.get(i);
+        }
+       
         
         
         return answer;
