@@ -1,55 +1,44 @@
 import java.util.*;
-
 class Solution {
     
-    public static int isselected[];
-    public static int isvisit[];
-    public int game=0;
-    public static int answer=-1;
+    static int answer=-1;
+    static int []visit,isSelected;
     
-    
-    public static void game(int k,int [][]dungeons)
-    {
-        int now=k;
-        int index=0;
-        int count=0;
-        for(int i=0;i<isselected.length;i++)
-        {
-            int first=dungeons[isselected[i]][0];
-            int second=dungeons[isselected[i]][1];
-            if(now>=first)
-            {
-                now-=second;
-                count+=1;
+    public void game(int k, int[][]dungeons){
+        
+        int temp=0;
+        int tempK=k;
+        for(int i : isSelected){
+            int first=dungeons[i][0];
+            int second=dungeons[i][1];
+            if(tempK>=first){
+                tempK-=second;
+                temp+=1;
             }
-            else
-                break;
-            
-            
+            else{
+                answer=Math.max(answer,temp);
+                return;
+            }
         }
-        
-        answer=Math.max(answer,count);
-        
+        answer=Math.max(answer,temp);
     }
     
     
-    public static void perm(int cnt,int n,int k,int [][]dungeons)
-    {
-        if(cnt==n)
-        {
-            game(k,dungeons);            
+    public void make(int k, int[][]dungeons,int cnt){
+        int n=dungeons.length;
+        if(cnt==n){
+            game(k,dungeons);
             return;
         }
-        for(int i=0;i<n;i++)
-        {
-            if(isvisit[i]==1)
+        for(int i=0;i<n;i++){
+            if(visit[i]==1)
                 continue;
-            isselected[cnt]=i;
-            isvisit[i]=1;
-            perm(cnt+1,n,k,dungeons);
-            isvisit[i]=0;            
+            visit[i]=1;
+            isSelected[cnt]=i;
+            make(k,dungeons,cnt+1);
+            visit[i]=0;
+            
         }
-        
         
     }
     
@@ -57,11 +46,10 @@ class Solution {
     
     public int solution(int k, int[][] dungeons) {
         
-        isselected=new int[dungeons.length];
-        isvisit=new int[dungeons.length];
-        //던전을 최대한 많이 탐험 하고자 한다
-        //던전 탐험 계획을 조합 으로 만들어서 하면 되겠다
-        perm(0,dungeons.length,k,dungeons);
+        visit=new int[dungeons.length];
+        isSelected=new int[dungeons.length];
+        make(k,dungeons,0);
+        
         
         
         return answer;
