@@ -1,94 +1,62 @@
 import java.util.*;
-
 class Solution {
     
-    public static class go{
-        int vertex;
-        public go(int vertex){
-            this.vertex=vertex;
-        }    
-    }
-    
-    static int answer=99999;
-    static List<List<go>> list=new LinkedList<>();
-    
-    
-    public static void bfs(int start, int[]visit,int x1,int x2,int count)
-    {
-        Queue<go>q=new LinkedList<>();
-        visit[start]=count;
-        q.add(new go(start));
-        while(q.size()>0){
-            go aa=q.poll();
-            List<go> now=list.get(aa.vertex);
-            for(go a1:now){
-                if(aa.vertex==x1 &&a1.vertex==x2 )
+    static List<List<Integer>>graph=new ArrayList<>();
+    public void bfs(int[] visit,int start,int v1,int v2,int flag){
+        
+        Deque<Integer>q=new ArrayDeque<>();
+        visit[start]=flag;
+        q.add(start);
+        while(!q.isEmpty()){
+            int now=q.poll();
+            for(int i : graph.get(now)){
+                if(visit[i]!=0)
                     continue;
-                if(aa.vertex==x2 &&a1.vertex==x1 )
+                if((now==v1&&i==v2)||(now==v2&&i==v1))
                     continue;
-                if(visit[a1.vertex]==0)
-                {
-                    visit[a1.vertex]=count;
-                    q.add(new go(a1.vertex));
-                }
-            }      
+                visit[i]=flag;
+                q.add(i);
+            }
         }
     }
-    
     
     public int solution(int n, int[][] wires) {
-        
-        for(int i=0;i<=n;i++)
-            list.add(new LinkedList<>());
-        for(int i=0;i<wires.length;i++)
-        {
-            int a1,a2;
-            a1=wires[i][0];
-            a2=wires[i][1];
-            list.get(a1).add(new go(a2));
-            list.get(a2).add(new go(a1));
+        int answer = 1000;
+        //전선들 중 하나를 끊어서 송전탑 개수가 가능한 비슷 하도록 두 전력망 나누도록 하자
+        for (int i=0;i<=n;i++){
+            graph.add(new ArrayList<>());
         }
         
-        for(int i=0;i<wires.length;i++)
-        {
-            int visit[]=new int[n+1];
-            int a1,a2;
-            a1=wires[i][0];
-            a2=wires[i][1];
-            //다 진행 한 후에 확인을 해보도록 하자, 전력망이 두개로 나뉘었는지
-            int count=0;
-            for(int j=1;j<=n;j++)
-            {
-                if(visit[j]==0)
-                {
-                    count+=1;
-                    bfs(j,visit,a1,a2,count);
-                }
-            }
-            if(count==2)
-            {
-                //이때 이제 갱신을 하도록 하면은 됨
-                int x1,x2;
-                x1=0;
-                x2=0;
-                for(int j=1;j<=n;j++)
-                {
-                    
-                    if(visit[j]==1)
-                    {
-                        x1+=1;
-                    }
-                    else if(visit[j]==2)
-                    {
-                        x2+=1;
-                    }
-                }
-                answer=Math.min(answer,Math.abs(x1-x2));
-                
-            }
-            
+        for(int i=0;i<wires.length;i++){
+            int v1=wires[i][0];
+            int v2=wires[i][1];
+            graph.get(v1).add(v2);
+            graph.get(v2).add(v1);
         }
         
+        for(int i=0;i<wires.length;i++){
+            int v1=wires[i][0];
+            int v2=wires[i][1];
+            int[]visit=new int[n+1];
+            int temp=1;
+            for(int j=1;j<=n;j++){
+                if (visit[j]==0){
+                    bfs(visit,j,v1,v2,temp);
+                    temp+=1;
+                }
+            }
+            int left=0;
+            int right=0;
+            for(int j=1;j<=n;j++){
+                if(visit[j]==1){
+                    left+=1;
+                }
+                else{
+                    right+=1;
+                }
+            }
+            answer=Math.min(answer,Math.abs(left-right));
+        }
         
         return answer;
     }
