@@ -1,37 +1,43 @@
 import java.util.*;
-
 class Solution {
     
-    static int visit[];
+    static List<List<Integer>>list=new ArrayList<>();
     
-    public void bfs(int start,int n, int[][]computers){
-        
-        Deque<Integer>queue=new LinkedList<>();
+    public void bfs(int[]visit,int start){
         visit[start]=1;
-        queue.add(start);
-        while(!queue.isEmpty()){
-            int now=queue.poll();
-            for(int i=0;i<computers[now].length;i++){
-                int temp=computers[now][i];
-                if(temp==1&&visit[i]==0){
-                    visit[i]=1;
-                    queue.add(i);
-                    // System.out.println(Arrays.toString(visit));
-                }
-            }
-        }
-        
+        Deque<Integer>q=new ArrayDeque<>();
+        q.add(start);
+        while(!q.isEmpty()){
+            int now=q.poll();
+            for(int i: list.get(now)){
+                if(visit[i]==1)
+                    continue;
+                visit[i]=1;
+                q.add(i);   
+            }            
+        }     
     }
     
     public int solution(int n, int[][] computers) {
         int answer = 0;
-        visit=new int[n];
         for(int i=0;i<n;i++){
-            if(visit[i]==1)
-                continue;
-            bfs(i,n,computers);    
-            answer+=1;
+            list.add(new ArrayList<>());
         }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(i==j||computers[i][j]==0)
+                    continue;
+                list.get(i).add(j);
+            }
+        }
+        int[]visit=new int[n];
+        for(int i=0;i<n;i++){
+            if(visit[i]==0){
+                bfs(visit,i);
+                answer+=1;
+            }
+        }
+        
         
         return answer;
     }
