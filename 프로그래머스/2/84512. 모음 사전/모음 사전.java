@@ -1,33 +1,29 @@
 import java.util.*;
 class Solution {
     
-    static int answer=0;
-    static int count=0;
-    static char[] ss={'A','E','I','O','U'};
-    public static void dfs(int index,String word,String now)
-    {
-        if(now.equals(word)){
-                answer=count;
-                return;
-            }
-        if(index==5)
-        {    
-            return;
+    static int[] isSelected;
+    static char[] go=new char[]{'A', 'E', 'I', 'O', 'U'};
+    static List<String>list=new ArrayList<>();
+    
+    public void make(String now,int cnt){
+        if(cnt>=5){
+            return; 
         }
-        for(int i=0;i<5;i++)
-        {
-            //System.out.println(now);
-            count+=1;
-            String ss1=now+String.valueOf(ss[i]);
-            dfs(index+1,word,ss1);
+        for(int i=0;i<5;i++){
+            String temp=now;
+            temp+=go[i];
+            list.add(temp);
+            make(temp,cnt+1);
         }
-
     }
     
     
-    
     public int solution(String word) {
-        dfs(0,word,"");
+        int answer = 0;
+        
+        make("",0);
+        for(int i=0;i<list.size();i++){ if(list.get(i).equals(word)) return i+1; }
+        
         
         return answer;
     }
