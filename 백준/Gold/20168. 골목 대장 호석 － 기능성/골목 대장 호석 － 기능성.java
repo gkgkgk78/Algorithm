@@ -42,6 +42,8 @@ public class Main {
                 temp = Math.min(temp, distance[gone]);
                 continue;
             }
+            if (a.weight > distance[a.ver]) continue;
+
             for (go g : graph.get(a.ver)) {
                 int now = a.weight + g.weight;
                 if (distance[g.ver] < now || g.weight > check)
@@ -84,6 +86,8 @@ public class Main {
             int to = Integer.parseInt(st.nextToken());
             int weight = Integer.parseInt(st.nextToken());
             graph.get(from).add(new go(to, weight));
+            graph.get(to).add(new go(from, weight));
+
         }
 
         while (left + 1 < right) {
