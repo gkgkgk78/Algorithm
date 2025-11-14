@@ -1,84 +1,85 @@
-import javax.print.ServiceUIFactory;
-import java.io.*;
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
 
-    //n명의 학생이 x마을에 모여서 파티를 벌이기로 했다
 
-    public static class go {
-        int end, value;
+    static class go {
+        int vertex, value;
 
-        public go(int end, int value) {
-            this.end = end;
+        go(int vertex, int value) {
+            this.vertex = vertex;
             this.value = value;
         }
     }
 
-    public static int dijk(int n, ArrayList<go> list[], int start, int last) {
 
-        int visit[] = new int[n];
-        for (int i = 0; i < n; i++) {
-            visit[i] = Integer.MAX_VALUE;
-        }
-        visit[start] = 0;
+    static List<List<go>> graph = new ArrayList<>();
+
+    public static int dijk(int start, int fin, int n) {
         PriorityQueue<go> q = new PriorityQueue<>((x, y) -> {
             return x.value - y.value;
         });
+        int distance[] = new int[n + 1];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[start] = 0;
         q.add(new go(start, 0));
-
+        int answer = -1;
         while (!q.isEmpty()) {
             go a = q.poll();
-            if (a.value > visit[a.end])
+            if (a.value > distance[a.vertex])
                 continue;
-            for (go vertex : list[a.end]) {
-                int now = vertex.value + a.value;
-                if (visit[vertex.end] > now) {
-                    visit[vertex.end] = now;
-                    q.add(new go(vertex.end, now));
+            if (a.vertex == fin) {
+                answer = a.value;
+                break;
+            }
+            for (go now : graph.get(a.vertex)) {
+                int temp = now.value + a.value;
+                if (temp < distance[now.vertex]) {
+                    distance[now.vertex] = temp;
+                    q.add(new go(now.vertex, temp));
                 }
             }
         }
-        return visit[last];
+        return answer;
+
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer s = new StringTokenizer(br.readLine(), " ");
-        //이 마을 사이에는 총 m개의 단방향 도로들이 있고
-
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
         int n, m, x;
-        n = Integer.parseInt(s.nextToken());
-        m = Integer.parseInt(s.nextToken());
-        x = Integer.parseInt(s.nextToken());
-        x -= 1;
-
-        ArrayList<go> list[] = new ArrayList[n];
-
-        for (int i = 0; i < n; i++) {
-            list[i] = new ArrayList<>();
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        x = Integer.parseInt(st.nextToken());
+        for (int i = 0; i <= n; i++) {
+            graph.add(new ArrayList<>());
         }
         for (int i = 0; i < m; i++) {
-            s = new StringTokenizer(br.readLine(), " ");
-            int a1, a2, a3;
-            a1 = Integer.parseInt(s.nextToken());
-            a2 = Integer.parseInt(s.nextToken());
-            a3 = Integer.parseInt(s.nextToken());
-            a1 -= 1;
-            a2 -= 1;
-            list[a1].add(new go(a2, a3));
-//            list[a2].add(new go(a1, a3));
+            st = new StringTokenizer(br.readLine(), " ");
+            int a, b, c;
+            a = Integer.parseInt(st.nextToken());
+            b = Integer.parseInt(st.nextToken());
+            c = Integer.parseInt(st.nextToken());
+            graph.get(a).add(new go(b, c));
         }
-        int visit[] = new int[n];
-        int answer = -1;
-        for (int i = 0; i < n; i++) {
-            int go = dijk(n, list, i, x);
-            int back = dijk(n, list, x, i);
-            visit[i] = go + back;
-            answer = Math.max(answer, visit[i]);
+        int temp = -1;
+        int vertex = -1;
+        for (int i = 1; i <= n; i++) {
+            int first = dijk(i, x, n);
+            int second = dijk(x, i, n);
+            if (first + second > temp) {
+                temp = first + second;
+                vertex = i;
+            }
         }
-        System.out.println(answer);
+        System.out.println(temp);
 
     }
+
 
 }
