@@ -1,84 +1,81 @@
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
 
-	static int[] parents;
-	static int v, e;
 
-	static void make() {
+    static int[] parents;
+    static int n;
 
-		for (int i = 0; i < v; i++) {
-			parents[i] = i;
-		}
+    public static void make() {
+        for (int i = 0; i < n; i++) {
+            parents[i] = i;
+        }
+    }
 
-	}
+    public static int find(int v) {
+        if (parents[v] == v)
+            return v;
+        return find(parents[v]);
+    }
 
-	static int find(int a) {
-		if (parents[a] == a)
-			return a;
-		return parents[a] = find(parents[a]);
+    public static void union(int v1, int v2) {
+        int f1 = find(v1);
+        int f2 = find(v2);
+        if (f1 != f2) {
+            if (f1 < f2) {
+                parents[f2] = f1;
+            } else {
+                parents[f1] = f2;
+            }
+        }
+    }
 
-	}
 
-	static boolean union(int a, int b) {
-		int u1=find(a);
-		int u2=find(b);
-		if (u1==u2)
-			return false;
-		
-		if(u1<u2)
-			parents[u2] = u1;
-		else
-			parents[u1] = u2;
-		return true;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        n = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine(), " ");
+        parents = new int[n];
+        int m = Integer.parseInt(st.nextToken());
 
-	}
+        make();
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine(), " ");
+            for (int j = 0; j < n; j++) {
+                int a = Integer.parseInt(st.nextToken());
+                if (a == 1) {
+                    union(i, j);
+                }
+            }
+        }
+        st = new StringTokenizer(br.readLine(), " ");
+        int size = st.countTokens();
+        int[] plan = new int[size];
+        for (int i = 0; i < size; i++) {
+            plan[i] = Integer.parseInt(st.nextToken());
+            plan[i] -= 1;
+        }
+        for (int i = 0; i < n; i++) {
+            parents[i] = find(i);
+        }
+        String answer = "YES";
+        int first = parents[plan[0]];
+        for (int i = 1; i < size; i++) {
+            if (first != parents[plan[i]]) {
+                answer = "NO";
+                break;
+            }
+        }
+        System.out.println(answer);
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		// TODO Auto-generated method stub
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    }
 
-		int n = Integer.parseInt(in.readLine());
-		int m = Integer.parseInt(in.readLine());
-		parents = new int[n + 1];
-		v=n;
-		make();
-		for (int i = 0; i < n; i++) {
-			StringTokenizer s = new StringTokenizer(in.readLine());
-
-			for (int j = 0; j < n; j++) {
-				int temp = Integer.parseInt(s.nextToken());
-				if (temp == 1) {
-					union(i, j);
-
-				}
-
-			}
-
-		}
-		//System.out.println(Arrays.toString(parents));
-		
-		StringTokenizer s = new StringTokenizer(in.readLine());
-		int start=Integer.parseInt(s.nextToken());
-		start--;
-		for(int i=1;i<m;i++ ) {
-			int t=Integer.parseInt(s.nextToken());
-			t-=1;
-			int uu=find(t);
-			//System.out.println(find(start)+" "+find(t));
-			if(find(start)!=find(t))
-			{
-				System.out.println("NO");
-				System.exit(0);
-			}
-			
-		}
-		System.out.println("YES");
-	}
 
 }
