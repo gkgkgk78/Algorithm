@@ -8,11 +8,11 @@ def solution(stones, k):
     while left+1<right:
         mid=(left+right)//2
         aa=go(stones,k,mid)
-        if aa==1:
+        if aa==0:
             right=mid  
         else:
             left=mid
-    answer=left+1
+    answer=left
     
     
     return answer
@@ -23,14 +23,14 @@ def go(stone,k,users):
     count=0
     cc=0
     for i in stone:
-        if i <= users:
+        if i < users:
             cc+=1
             if cc>=k:
-                return 1
+                return 0
         else:
             cc=0
 
-    return 0
+    return 1
    
     
     
