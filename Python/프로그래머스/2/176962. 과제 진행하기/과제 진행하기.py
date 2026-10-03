@@ -25,11 +25,9 @@ def solution(plans):
                     nowTime=nex
                     answer.append(bname)
                     if nex==start:
-                        nowTime=start
                         break
                 else:
                     plays.append([bname,bstart,bplayTime-(start-nowTime)])
-                    nowTime=start
                     break
         plays.append([name,start,playTime])
         nowTime=start
